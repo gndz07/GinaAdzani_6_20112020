@@ -1,0 +1,14 @@
+{
+  "name": "package_p4",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "sass": "sass --watch main.scss:main.css"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^7.13.0"
+  }
+}
