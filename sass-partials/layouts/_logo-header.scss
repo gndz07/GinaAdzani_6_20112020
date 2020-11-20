@@ -1,0 +1,21 @@
+.header {
+
+	&--logo {
+		margin: 40px 25px 0 0;
+		&--img {
+			width: 150px;
+		}
+	}
+}
+
+@media all and (min-width: 1024px) {
+	.header {
+		display: flex;
+
+		&--logo {
+			&--img {
+				width: 200px;
+			}
+		}
+	}
+}
