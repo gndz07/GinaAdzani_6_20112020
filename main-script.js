@@ -30,7 +30,7 @@ function attr(element, attrName, attrValue) {
 }
 
 
-ajaxGet("http://localhost/P6_OC/FishEyeDataFR.json", function(response) {
+ajaxGet("./FishEyeDataFR.json", function(response) {
 	var photos = JSON.parse(response);
 
 	for (var i = 0; i<photos.photographers.length; i++) {
