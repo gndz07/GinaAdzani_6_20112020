@@ -1,4 +1,5 @@
 @import './sass-partials/utils/variables';
+@import './sass-partials/utils/mixins';
 @import './sass-partials/base/base';
 @import './sass-partials/components/tags';
 @import './sass-partials/layouts/logo-header';
@@ -6,6 +7,151 @@
 @import './sass-partials/pages/index';
 
 
-.tiles-img {
-	width: 200px;
+
+#modal-bg {
+	display: none; 
+	position: fixed;
+	z-index: 2;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(255,255,255,0.8);
+	overflow: scroll;
+	color: $primary-color;
+	
+
+	#modal-img {
+	@include center-vertical-position;
+	 	left: 50%;
+		width: 80%;
+	}
+
+	.fa-chevron-right {
+		@include center-vertical-position;
+		margin-left: 95%;
+		font-size: xx-large;
+	}
+
+	.fa-chevron-left {
+		@include center-vertical-position;
+		margin-left: 5%;
+		font-size: xx-large;
+	}
+}
+
+
+
+#close {
+	position: absolute;
+	top: 2.5em;
+	right: 1em;
+	cursor: pointer;
+	font-size: xx-large;
+}
+
+.img-block {
+	text-align: right;
+	margin-top: -11em;
+	margin-bottom: 5em;
+
+	.tiles-items--photo {
+		width: 120px;
+		height: 120px;
+	}
+}
+
+.data-block {
+	h1 {
+		margin-left: 0;
+	}
+	.tiles-items--location {
+		margin-left: 0;
+	}
+	.container-tags {
+		font-size: 0.9em;
+		font-weight: 500;
+	}
+}
+
+.tiles {
+	color: $primary-color;
+	font-size: 0.9em;
+	&--img {
+		width: 100%;
+		height: 250px;
+		object-fit: cover;
+		cursor: pointer;
+	}
+
+	&--name {
+		margin: 0.3em 0 1.5em 0;
+	}
+
+	&--details{
+		display: flex;
+		justify-content: flex-end;
+		margin-left: 1em;
+		margin-top: -2.6em;
+
+		&--price{
+			margin-top: 0;
+			margin-right: 0.8em;
+			
+		}
+
+		&--likes {
+			&--number {
+				margin-top: 0;
+				margin-right: 0.2em;
+			}
+
+			&--icon {
+				
+			}
+			
+		}
+	}
+}
+
+#contact-btn {
+	position: fixed;
+	z-index: 1;
+	bottom: 1.5em;
+	left: 50%;
+	transform: translateX(-50%);
+	background-color: $primary-color;
+	color: white;
+	padding: 0.5em 2em;
+	border-radius: 10px;
+	cursor: pointer;
+}
+
+#bg-form-modal {
+	display: none; 
+	position: fixed;
+	z-index: 3;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(255,255,255,0.8);
+	overflow: scroll;
+	color: $primary-color;
+
+	.modal-form-content {
+		margin: 5% auto;
+		width: 100%;
+		max-width: 500px;
+		background-color: lighten($secondary-color, 20%);
+		border-radius: 10px;
+		overflow: hidden;
+		position: relative;
+		padding-top: 10px;
+
+		.form-content {
+			padding: 15px 8%;
+			margin: 15px auto;
+		}
+	}
 }
