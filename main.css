@@ -28,6 +28,27 @@ body {
   cursor: pointer;
 }
 
+.btn {
+  position: fixed;
+  z-index: 1;
+  bottom: 1.5em;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #901C1C;
+  color: white;
+  padding: 0.5em 2em;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.close {
+  position: absolute;
+  top: 2.5em;
+  right: 1em;
+  cursor: pointer;
+  font-size: xx-large;
+}
+
 .header--logo {
   margin: 40px 25px 0 0;
 }
@@ -208,14 +229,6 @@ body {
   font-size: xx-large;
 }
 
-#close {
-  position: absolute;
-  top: 2.5em;
-  right: 1em;
-  cursor: pointer;
-  font-size: xx-large;
-}
-
 .img-block {
   text-align: right;
   margin-top: -11em;
@@ -264,19 +277,6 @@ body {
   margin-top: 0;
   margin-right: 0.2em;
 }
-#contact-btn {
-  position: fixed;
-  z-index: 1;
-  bottom: 1.5em;
-  left: 50%;
-  transform: translateX(-50%);
-  background-color: #901C1C;
-  color: white;
-  padding: 0.5em 2em;
-  border-radius: 10px;
-  cursor: pointer;
-}
-
 #bg-form-modal {
   display: none;
   position: fixed;
@@ -290,8 +290,13 @@ body {
   color: #901C1C;
 }
 #bg-form-modal .modal-form-content {
-  margin: 5% auto;
-  width: 100%;
+  left: 50%;
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: block;
+  width: 90%;
   max-width: 500px;
   background-color: #e69f8f;
   border-radius: 10px;
@@ -299,9 +304,67 @@ body {
   position: relative;
   padding-top: 10px;
 }
+#bg-form-modal .modal-form-content .close {
+  top: 10px;
+  right: 10px;
+}
 #bg-form-modal .modal-form-content .form-content {
   padding: 15px 8%;
   margin: 15px auto;
+}
+#bg-form-modal .modal-form-content .form-content .form-data {
+  font-size: larger;
+}
+#bg-form-modal .modal-form-content .form-content .form-data[data-error]::after {
+  content: attr(data-error);
+  font-size: 0.5em;
+  color: #e54858;
+  display: block;
+  margin-top: 7px;
+  margin-bottom: 7px;
+  text-align: right;
+  line-height: 0.3;
+  opacity: 0;
+  transition: 0.3s;
+}
+#bg-form-modal .modal-form-content .form-content .form-data[data-error-visible=true]::after {
+  opacity: 1;
+}
+#bg-form-modal .modal-form-content .form-content .form-data[data-error-visible=true] .text-control {
+  border: 2px solid #e54858;
+}
+#bg-form-modal .modal-form-content .form-content .form-data .text-control {
+  width: 95%;
+  font-size: larger;
+  padding: 10px 5px;
+}
+#bg-form-modal .modal-form-content .form-content .btn {
+  position: relative;
+  bottom: 0;
+  margin-top: 2em;
+}
+#bg-form-modal .modal-form-content .form-content #formResult {
+  width: 100%;
+  height: 100%;
+  background: #e69f8f;
+  z-index: 999;
+  position: absolute;
+  left: 0;
+  top: 0;
+  text-align: center;
+  display: none;
+  font-size: 2em;
+  padding: 55% 20px;
+}
+#bg-form-modal .modal-form-content .form-content #formResult .close {
+  right: 50px;
+}
+#bg-form-modal .modal-form-content .form-content #formResult p {
+  margin-left: -1em;
+}
+#bg-form-modal .modal-form-content .form-content #formResult .btn {
+  position: fixed;
+  bottom: 1em;
 }
 
 /*# sourceMappingURL=main.css.map */

@@ -17,7 +17,7 @@
 	
 		<div class="header--logo">
 			<a href="index.html" aria-label="FishEye Homepage" role="image link">
-			<img src="fisheye_logo.png" alt="Fisheye Homepage" class="header--logo--img">
+			<img src="fisheye_logo.PNG" alt="Fisheye Homepage" class="header--logo--img">
 			</a>
 		</div>
 
@@ -36,23 +36,21 @@
 		</section>
 
 		<section id="modal-bg">
-			<i id="close" class="fas fa-times"></i>
+			<i class="close fas fa-times"></i>
 			<i class="fas fa-chevron-left"></i>
 			<i class="fas fa-chevron-right"></i>
-			
-
 		</section>
 
-		<button type="button" id="contact-btn">Contactez-moi</button>
-<!--
+		<button type="button" id="contact-btn" class="btn">Contactez-moi</button>
+
 		<section id="bg-form-modal">
 			<div class="modal-form-content">
-				<i id="close" class="fas fa-times"></i>
+				<i class="close fas fa-times"></i>
 				<form name="contact" method="post">
 					<div class="form-content">
 						<h2>Contactez-moi
 							<br>
-							<span class="photographer-name"></span>
+							<span id="photographer-name"></span>
 						</h2>
 
 						<div class="form-data">
@@ -76,17 +74,21 @@
                			<div class="form-data">
 							<label for="message">Votre message</label>
 							<br>
-                			<textarea class="text-control" id="email" name="email" rows="4"/>
+                			<textarea class="text-control" id="message" name="message" rows="4"></textarea>
                			</div>
 
-               			<input class="btn-submit" type="submit" class="button" value="C'est parti"/>
+               			<input id="submit-btn" type="submit" class="btn" value="Envoyer"/>
 
-
+               			<div id="formResult">
+              				<i class="close fas fa-times"></i>
+              				<p id="formResultText"></p>
+              				<input id="close-btn--validation" class="btn" type="button" value="Fermer"/>
+						</div>
 					</div>
 				</form>
 			</div>
 		</section>
-	-->
+	
 		
 
 	</main>

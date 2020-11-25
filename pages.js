@@ -1,6 +1,6 @@
-function ajaxGet(url, callback) {
+function ajaxCall(reqType, url, callback) {
 	var request = new XMLHttpRequest();
-	request.open("GET", url);
+	request.open(reqType, url);
 	request.addEventListener("load", function() {
 		if (request.status >= 200 && request.status < 400) {
 			callback(request.responseText);
@@ -18,7 +18,7 @@ function ajaxGet(url, callback) {
 
 //call ajax function to start create elements
 //header element (photographer profile)
-ajaxGet("./FishEyeDataFR.json", function(response) {
+ajaxCall("GET", "http://localhost/P6_OC/FishEyeDataFR.json", function(response) {
 	var response = JSON.parse(response);
 	var pageTitle = document.querySelector("title").textContent;
 
@@ -197,19 +197,167 @@ ajaxGet("./FishEyeDataFR.json", function(response) {
 	}
 });
 
-//take close button
-var close = document.getElementById("close");
-//click on close button
-close.onclick = function() {
-	var modalBg = document.getElementById("modal-bg");
-	modalBg.style.display = "none";
-};
-
-/*
+//DOM of contact form
+var formModalBg = document.getElementById("bg-form-modal");
 //contact button DOM
 var contactBtn = document.getElementById("contact-btn");
 contactBtn.addEventListener("click", function () {
-	var modalBg = document.getElementById("modal-bg");
-	modalBg.style.display = "block";
+	formModalBg.style.display = "block";
 });
-*/
+
+//take close button
+var close = document.getElementsByClassName("close");
+//function to exit modals
+function exit(i, element) {
+	close[i].addEventListener("click", function() {
+		element.style.display = "none";
+	})
+}
+//DOM of lightbox
+var modalBg = document.getElementById("modal-bg");
+exit(1, formModalBg);
+exit(0, modalBg);
+exit(2, formModalBg);
+
+//name on the contact form
+var contactFormName = document.getElementById("photographer-name");
+contactFormName.textContent = document.querySelector("title").textContent;
+
+//contact form submission
+//DOM for form input fields
+var firstName = document.getElementById("first");
+var lastName = document.getElementById("last");
+var email = document.getElementById("email");
+var message = document.getElementById("message");
+
+//form data DOM
+var formData = Array.from(document.querySelectorAll(".form-data"));
+
+//function to show error message
+function showError(index, message) {
+	formData[index].setAttribute("data-error", message);
+	formData[index].setAttribute("data-error-visible", true);
+};
+
+//function to hide error when input is valid
+function hideError(index) {
+	formData[index].removeAttribute("data-error");
+	formData[index].removeAttribute("data-error-visible");
+};
+
+//valid condition
+valid = true;
+
+//first name validation function
+//regex for name formats, not allowing space at the start and end
+var nameRegex = /^[^\s]+(\s+[^\s]+)*$/;
+function validateFirstName() {
+	if (!nameRegex.test(firstName.value) || firstName.value.length < 2) {
+ 		valid = false;
+ 		message = "Veuillez entrer 2 caractères ou plus pour le champ du prénom.";
+		showError(0, message);		
+ 	} else {
+ 		valid;
+ 		hideError(0);	
+ 	}
+ 	return valid;
+ };
+//onblur validation
+firstName.addEventListener('blur', validateFirstName);
+
+//last name validation function
+function validateLastName() {
+	if (!nameRegex.test(lastName.value) || lastName.value.length < 2) {
+ 		valid = false;
+ 		message = "Veuillez entrer 2 caractères ou plus pour le champ du nom.";
+ 		showError(1, message);
+
+ 	} else {
+ 		valid;
+ 		hideError(1);
+ 	}
+ 	return valid;
+ };
+ //onblur validation
+lastName.addEventListener('blur', validateLastName);
+
+//email validation function
+function validateEmail() {
+	var regexEmail = /.+@.+\..+/;
+ 	if (!regexEmail.test(email.value)) {
+ 		valid = false;
+ 		message = "Veuillez entrer une adresse email valide.";
+ 		showError(2, message);
+ 	} else {
+ 		valid;
+ 		hideError(2);
+ 	}
+ 	return valid;
+};
+//onblur validation
+email.addEventListener('blur', validateEmail);
+
+//message validation function
+function validateMessage() {
+	if (!nameRegex.test(message.value)) {
+		valid = false;
+		message = "Veuillez entrer votre message.";
+		showError(3, message);
+	} else {
+		valid;
+		hideError(3);
+	}
+	return valid;
+}
+//onblur validation
+message.addEventListener('blur', validateMessage);
+
+//onsubmit form verification
+//submit button DOM
+var submitButton = document.getElementById("submit-btn");
+//validation on clicking the submit button
+submitButton.addEventListener("click", validate);
+
+//function on clicking the submit button, AJAX request
+function validate (e) {
+	e.preventDefault();
+	var request = new XMLHttpRequest();
+	request.onload = validateForm();
+}
+
+//function to validate form onsubmit
+function validateForm () {
+ 	valid = true;
+ 	//first name validation
+ 	validateFirstName();
+ 	//last name validation
+ 	validateLastName();
+ 	//email validation
+ 	validateEmail();
+ 	//message validation
+ 	validateMessage();
+
+ 	//valid form, show success message
+ 	if (valid) {
+ 		var successMessage = document.getElementById("formResult");
+ 		var successMessageText = document.getElementById("formResultText");
+ 		var message = "Merci pour votre message !";
+ 		successMessageText.textContent = message;
+ 		successMessage.style.display = "block";
+
+ 	}
+
+ 	return valid;
+ }
+
+ //Close button on modal
+ //close button DOM
+ var modalCloseBtn = document.getElementById("close-btn--validation");
+ //redirecting to index.html on click
+ modalCloseBtn.onclick = function() {
+ 	var successMessage = document.getElementById("formResult");
+ 	formModalBg.style.display = "none";
+ 	document.querySelector("form").reset();
+ 	successMessage.style.display = "none";
+ };
+
