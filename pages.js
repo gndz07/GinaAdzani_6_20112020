@@ -18,7 +18,7 @@ function ajaxCall(reqType, url, callback) {
 
 //call ajax function to start create elements
 //header element (photographer profile)
-ajaxCall("GET", "http://localhost/P6_OC/FishEyeDataFR.json", function(response) {
+ajaxCall("GET", "./FishEyeDataFR.json", function(response) {
 	var response = JSON.parse(response);
 	var pageTitle = document.querySelector("title").textContent;
 

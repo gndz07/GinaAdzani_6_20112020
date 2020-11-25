@@ -63,9 +63,36 @@
 	.tiles-items--location {
 		margin-left: 0;
 	}
+	.tiles-items--tagline {
+		color: $tertiary-color;
+	}
 	.container-tags {
 		font-size: 0.9em;
 		font-weight: 500;
+	}
+}
+
+@media all and (min-width: 1024px) {
+	#id-block {
+		padding: 1em 4em;
+		margin: 1em auto;
+		background-color: $quaternary-color;
+		width: 90%;
+
+		.img-block {
+			margin-bottom: 0;
+
+			img {
+				width: 180px;
+				height: 180px;
+			}
+		}
+
+		.data-block {
+			.container-tags {
+				justify-content: flex-start;
+			}
+		}
 	}
 }
 
@@ -105,6 +132,22 @@
 				
 			}
 			
+		}
+	}
+}
+
+@media all and (min-width: 1024px) {
+	#photo-tiles {
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-around;
+
+		.tiles {
+			width: 30%;
+
+			&--img {
+				height: 300px;
+			}
 		}
 	}
 }

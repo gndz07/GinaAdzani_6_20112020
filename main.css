@@ -24,7 +24,7 @@ body {
   border: solid 1px #e1e1e1;
   border-radius: 1.5em;
   padding: 5px 10px;
-  margin: 0 5px;
+  margin-right: 10px;
   cursor: pointer;
 }
 
@@ -41,6 +41,16 @@ body {
   cursor: pointer;
 }
 
+@media all and (min-width: 1024px) {
+  #contact-btn {
+    font-size: initial;
+    position: absolute;
+    top: 10em;
+    bottom: unset;
+    left: 40%;
+    padding: 1em 2em;
+  }
+}
 .close {
   position: absolute;
   top: 2.5em;
@@ -245,11 +255,32 @@ body {
 .data-block .tiles-items--location {
   margin-left: 0;
 }
+.data-block .tiles-items--tagline {
+  color: #525252;
+}
 .data-block .container-tags {
   font-size: 0.9em;
   font-weight: 500;
 }
 
+@media all and (min-width: 1024px) {
+  #id-block {
+    padding: 1em 4em;
+    margin: 1em auto;
+    background-color: #FAFAFA;
+    width: 90%;
+  }
+  #id-block .img-block {
+    margin-bottom: 0;
+  }
+  #id-block .img-block img {
+    width: 180px;
+    height: 180px;
+  }
+  #id-block .data-block .container-tags {
+    justify-content: flex-start;
+  }
+}
 .tiles {
   color: #901C1C;
   font-size: 0.9em;
@@ -276,6 +307,19 @@ body {
 .tiles--details--likes--number {
   margin-top: 0;
   margin-right: 0.2em;
+}
+@media all and (min-width: 1024px) {
+  #photo-tiles {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+  #photo-tiles .tiles {
+    width: 30%;
+  }
+  #photo-tiles .tiles--img {
+    height: 300px;
+  }
 }
 #bg-form-modal {
   display: none;

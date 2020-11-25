@@ -1,0 +1,31 @@
+.btn {
+	position: fixed;
+	z-index: 1;
+	bottom: 1.5em;
+	left: 50%;
+	transform: translateX(-50%);
+	background-color: $primary-color;
+	color: white;
+	padding: 0.5em 2em;
+	border-radius: 10px;
+	cursor: pointer;
+}
+
+@media all and (min-width: 1024px) {
+	#contact-btn {
+		font-size: initial;
+		position: absolute;
+		top: 10em;
+		bottom: unset;
+		left: 40%;
+		padding: 1em 2em;
+	}
+}
+
+.close {
+	position: absolute;
+	top: 2.5em;
+	right: 1em;
+	cursor: pointer;
+	font-size: xx-large;
+}
