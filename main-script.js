@@ -30,7 +30,7 @@ function attr(element, attrName, attrValue) {
 }
 
 
-ajaxGet("./FishEyeDataFR.json", function(response) {
+ajaxGet("http://localhost/P6_OC/FishEyeDataFR.json", function(response) {
 	var photos = JSON.parse(response);
 
 	for (var i = 0; i<photos.photographers.length; i++) {
@@ -55,12 +55,10 @@ ajaxGet("./FishEyeDataFR.json", function(response) {
 		//link to go to each photographer's page
 		var pageLink = create("a");
 		//link to each page
-		pageLink.addEventListener("click", function() {
-			var w = window.open("photographer-page.html");
-			w.document.title = photoName;
-		});
+		attr(pageLink, "href", "photographer-page.html?name=" + photoName.replaceAll(" ", "_"));
 		//make sample photo as child of link element
 		pageLink.appendChild(imgSamplePhoto);
+		attr(pageLink, "tabindex", "0");
 
 		//fetch photographer name
 		var photographerName = create("h2");
@@ -103,6 +101,7 @@ ajaxGet("./FishEyeDataFR.json", function(response) {
 			attr(photographerTagsItems, "value", photographerTagsItems.textContent);
 			//tags style
 			attr(photographerTagsItems, "class", "container-tags--items photographer-tags");
+			attr(photographerTagsItems, "tabindex", 0);
 			//tags position
 			photographerTags.appendChild(photographerTagsItems);
 		}

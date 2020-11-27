@@ -16,14 +16,20 @@ function ajaxCall(reqType, url, callback) {
 	request.send(null); 
 }
 
+//function to get the name from the URL parameter
+	var urlParam = window.location.search.substring(1).split("=");
+	var nameFromUrl = urlParam[1].replaceAll("_", " ");
+
 //call ajax function to start create elements
 //header element (photographer profile)
-ajaxCall("GET", "./FishEyeDataFR.json", function(response) {
+ajaxCall("GET", "http://localhost/P6_OC/FishEyeDataFR.json", function(response) {
 	var response = JSON.parse(response);
-	var pageTitle = document.querySelector("title").textContent;
+
+	var pageTitle = document.querySelector("title")
+	pageTitle.textContent = nameFromUrl;
 
 	for (var i = 0; i<response.photographers.length; i++) {
-		if (pageTitle === response.photographers[i].name) {
+		if (pageTitle.textContent === response.photographers[i].name) {
 			//get DOM of the photographer profile section
 			var idBlock = document.getElementById("id-block");
 			var dataBlock = document.createElement("div");
@@ -31,7 +37,7 @@ ajaxCall("GET", "./FishEyeDataFR.json", function(response) {
 
 			//create the name element
 			var photographerName = document.createElement("h1");
-			photographerName.textContent = pageTitle;
+			photographerName.textContent = nameFromUrl;
 			//give class to element
 			photographerName.setAttribute("class", "tiles-items--name");
 			//put into the parent element
@@ -221,7 +227,7 @@ exit(2, formModalBg);
 
 //name on the contact form
 var contactFormName = document.getElementById("photographer-name");
-contactFormName.textContent = document.querySelector("title").textContent;
+contactFormName.textContent = nameFromUrl;
 
 //contact form submission
 //DOM for form input fields
