@@ -15,7 +15,15 @@ function ajaxCall(reqType, url, callback) {
 
 	request.send(null); 
 }
-
+//element creation function
+function create(element) {
+	var name = document.createElement(element);
+	return name;
+}
+//attribute function
+function attr(element, attrName, attrValue) {
+	element.setAttribute(attrName, attrValue);
+}
 //function to get the name from the URL parameter
 	var urlParam = window.location.search.substring(1).split("=");
 	var nameFromUrl = urlParam[1].replaceAll("_", " ");
@@ -32,45 +40,50 @@ ajaxCall("GET", "http://localhost/P6_OC/FishEyeDataFR.json", function(response) 
 		if (pageTitle.textContent === response.photographers[i].name) {
 			//get DOM of the photographer profile section
 			var idBlock = document.getElementById("id-block");
-			var dataBlock = document.createElement("div");
-			dataBlock.setAttribute("class", "data-block");
+			var dataBlock = create("div");
+			attr(dataBlock, "class", "data-block");
 
 			//create the name element
-			var photographerName = document.createElement("h1");
+			var photographerName = create("h1");
 			photographerName.textContent = nameFromUrl;
 			//give class to element
-			photographerName.setAttribute("class", "tiles-items--name");
+			attr(photographerName, "class", "tiles-items--name");
 			//put into the parent element
 			
 
 			//fetch photographer location
-			var photographerLocation = document.createElement("h2");
+			var photographerLocation = create("h2");
 			photographerLocation.textContent = response.photographers[i].city + ", " + response.photographers[i].country;
 			//location style
-			photographerLocation.setAttribute("class", "tiles-items--location");
+			attr(photographerLocation, "class", "tiles-items--location");
 
 			//fetch tagline
-			var photographerTagline = document.createElement("p");
+			var photographerTagline = create("p");
 			photographerTagline.textContent = response.photographers[i].tagline;
 			//tagline style
-			photographerTagline.setAttribute("class", "tiles-items--tagline");
+			attr(photographerTagline, "class", "tiles-items--tagline");
 
 			//fetch tags
-			var photographerTags = document.createElement("ul");
-			photographerTags.setAttribute("class", "container-tags");
+			var photographerTags = create("ul");
+			attr(photographerTags, "class", "container-tags");
 			//loop through each tags
 			for (var k = 0; k<response.photographers[i].tags.length; k++) {
-				var photographerTagsItems = document.createElement("li");
+				var photographerTagsItems = create("li");
 				photographerTagsItems.textContent = "#" + response.photographers[i].tags[k];
-				photographerTagsItems.setAttribute("value", photographerTagsItems.textContent);
+				attr(photographerTagsItems, "value", photographerTagsItems.textContent);
 				//tags style
-				photographerTagsItems.setAttribute("class", "container-tags--items");
+				attr(photographerTagsItems, "class", "container-tags--items");
+				//tags for screen reader
+				var srOnlyTags = create("span");
+				srOnlyTags.textContent = response.photographers[i].tags[k];
+				attr(srOnlyTags, "class", "sr-only");
 				//tags position
 				photographerTags.appendChild(photographerTagsItems);
+				photographerTags.appendChild(srOnlyTags);
 			}
 
 			//create img element to store the picture
-			var imgSamplePhoto = document.createElement("img");
+			var imgSamplePhoto = create("img");
 			//fetch sample image for each photographer using id
 			var photographerId = response.photographers[i].id;
 			for (var j = 0; j<response.media.length; j++) {
@@ -82,13 +95,12 @@ ajaxCall("GET", "http://localhost/P6_OC/FishEyeDataFR.json", function(response) 
 				}
 			}
 			//image alt text
-			var altText = "Photo par " + response.photographers[i].name;
-			imgSamplePhoto.setAttribute("alt", altText);
+			attr(imgSamplePhoto, "alt", response.photographers[i].name);
 			//image style
-			imgSamplePhoto.setAttribute("class", "tiles-items--photo");
+			attr(imgSamplePhoto, "class", "tiles-items--photo");
 			//div for picture
-			var imgBlock = document.createElement("div");
-			imgBlock.setAttribute("class", "img-block");
+			var imgBlock = create("div");
+			attr(imgBlock, "class", "img-block");
 
 
 
@@ -108,100 +120,135 @@ ajaxCall("GET", "http://localhost/P6_OC/FishEyeDataFR.json", function(response) 
 			//loop through the media contents
 			for (var j = 0; j<response.media.length; j++) {
 				var mediaPhotographerId = response.media[j].photographerId;
+				var mediaIndex = j;
 				//check if the media belonged to the same photographer
 				if (photographerId === mediaPhotographerId) {
 					//see if the media item is an image
 					if (response.media[j].hasOwnProperty("image")) {
-						var mediaItems = document.createElement("img");
+						//for initial image
+						var mediaItems = create("img");
 						mediaItems.src = 'sass-partials/images/' + response.media[j].image;
+						//for modal image
+						var mediaModal = create("img");
+						mediaModal.src = mediaItems.src;
 						//media name
-						var mediaName = document.createElement("p");
+						var mediaName = create("p");
 						mediaName.textContent = response.media[j].image.replaceAll("_", " ").slice(0, -4);
+						//modal name
+						var mediaModalName = create("p");
+						mediaModalName.textContent = mediaName.textContent;
 					//if the media item is a video
 					} else if (response.media[j].hasOwnProperty("video")) {
-						var mediaItems = document.createElement("video");
+						//for initial video
+						var mediaItems = create("video");
 						mediaItems.src = 'sass-partials/images/' + response.media[j].video;
 						mediaItems.controls = true;
+						//for modal video
+						var mediaModal = create("video");
+						mediaModal.src = mediaItems.src;
+						mediaModal.controls = true;
 						//media name
-						var mediaName = document.createElement("p");
+						var mediaName = create("p");
 						mediaName.textContent = response.media[j].video.replaceAll("_", " ").slice(0, -4);
+
+						//modal name
+						var mediaModalName = create("p");
+						mediaModalName.textContent = mediaName.textContent;
 					}
 					//media on initial size
-					mediaItems.setAttribute("class", "tiles--img");
-					mediaName.setAttribute("class", "tiles--name");
+					attr(mediaItems, "class", "tiles--img");
+					attr(mediaName, "class", "tiles--name");
 
+					//on modal
+					attr(mediaModal, "class", "modal-media");
+					attr(mediaModalName, "class", "modal-media-name");
+
+					
+					var initialMedia = document.getElementsByClassName("tiles--img");
+					var allModalImg = document.getElementsByClassName("modal-content");
+					var modalBg = document.getElementById("modal-bg");
+
+
+					
+					
+					
 					//trigger the modal appearance
+					var modalBg = document.getElementById("modal-bg");
 					mediaItems.addEventListener("click", function() {
 						if (this.tagName.toLowerCase() == "img") {
 							//create image inside the modal
-							var modalImg = document.createElement("img");
+							var modalImg = create("img");
 						} else if (this.tagName.toLowerCase() == "video") {
 							//create video inside the modal
-							var modalImg = document.createElement("video");
+							var modalImg = create("video");
 							modalImg.controls = true;
 						}
 						//take modal element
 						var modalBg = document.getElementById("modal-bg");
 						modalBg.appendChild(modalImg);
-						modalImg.setAttribute("id", "modal-img");
+						attr(modalImg, "id", "modal-img");
 						modalBg.style.display = "block";
 						modalImg.src = this.src;
 					});
+
+					var nextImg = document.getElementById("next-img");
+						nextImg.onclick = function() {
+							modalImg = document.getElementById("modal-img");
+							modalImg.src = "fisheye_logo.PNG";
+					}
+					
+					
+
+					
+					
 					
 
 					//media prices
-					var price = document.createElement("p");
+					var price = create("p");
 					price.textContent = response.media[j].price + "€";
-					price.setAttribute("class", "tiles--details--price");
+					attr(price, "class", "tiles--details--price");
 					//likes
-					var likes = document.createElement("p");
+					var likes = create("p");
 					likes.textContent = response.media[j].likes;
-					likes.setAttribute("class", "tiles--details--likes--number");
+					attr(likes, "class", "tiles--details--likes--number");
 					//likes icon
-					var likesIcon = document.createElement("i");
-					likesIcon.setAttribute("class", "fas fa-heart tiles--details--likes--icon");
-
-
-					//function to show slides
-					function showSlide() {
-						var i;
-						var images = document.getElementsByClassName("")
-					}
-					//take previous button element
-					var prevImg = document.getElementsByClassName("fa-chevron-left");
-					//function on clicking previous button
-					prevImg.onclick = function() {
-						
-					}
-					//take next button element
-					var nextImg = document.getElementsByClassName("fa-chevron-right");
+					var likesIcon = create("i");
+					attr(likesIcon, "class", "fas fa-heart tiles--details--likes--icon");
 
 
 					//media details block
-					var mediaDetails = document.createElement("div");
-					mediaDetails.setAttribute("class", "tiles--details");
+					var mediaDetails = create("div");
+					attr(mediaDetails, "class", "tiles--details");
 					//grouping the media details
 					mediaDetails.appendChild(price);
 					mediaDetails.appendChild(likes);
 					mediaDetails.appendChild(likesIcon);
 					
-
-					var imageTiles = document.createElement("article");
+					//DOM
+					var imageTiles = create("article");
 					imageTiles.setAttribute("class", "tiles");
 					imageTiles.appendChild(mediaItems);
 					imageTiles.appendChild(mediaName);
 					imageTiles.appendChild(mediaDetails);
 					tiles.appendChild(imageTiles);
+					//modal content
+					var modalContent = create("div");
+					attr(modalContent, "class", "modal-content");
+					modalContent.appendChild(mediaModal);
+					modalContent.appendChild(mediaModalName);
+					//modalBg.appendChild(modalContent);
 				}
 
 
 			}
 
-			break;
+			
 
 		}
 	}
 });
+
+
 
 //DOM of contact form
 var formModalBg = document.getElementById("bg-form-modal");
@@ -221,9 +268,24 @@ function exit(i, element) {
 }
 //DOM of lightbox
 var modalBg = document.getElementById("modal-bg");
+//exit(0, modalBg);
 exit(1, formModalBg);
-exit(0, modalBg);
 exit(2, formModalBg);
+
+//modal media close button
+var modalExit = document.getElementById("close-modal-media");
+modalExit.onclick = function() {
+	modalBg.style.display = "none";
+	modalBg.removeChild(modalBg.lastElementChild);
+}
+
+
+
+
+
+
+
+
 
 //name on the contact form
 var contactFormName = document.getElementById("photographer-name");
@@ -366,4 +428,6 @@ function validateForm () {
  	document.querySelector("form").reset();
  	successMessage.style.display = "none";
  };
+
+
 

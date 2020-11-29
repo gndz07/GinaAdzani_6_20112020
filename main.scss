@@ -3,9 +3,72 @@
 @import './sass-partials/base/base';
 @import './sass-partials/components/tags';
 @import './sass-partials/components/buttons';
+@import './sass-partials/components/sr-only';
 @import './sass-partials/layouts/logo-header';
 @import './sass-partials/layouts/profile';
 @import './sass-partials/pages/index';
+
+
+.sort {
+	display: none;
+}
+
+@media all and (min-width: 1024px) {
+	.sort {
+		display: flex;
+		margin-bottom: 2em;
+
+		p {
+			font-weight: bold;
+		}
+
+		&-content {
+			position: absolute;
+			list-style: none;
+			background-color: $primary-color;
+			color: white;
+			margin-left: 5em;
+			margin-top: -0.1em;
+			padding: 1em 1em 0;
+			cursor: pointer;
+			border-radius: 8px;
+
+			&--item {
+				padding-bottom: 1em;
+
+
+			}
+		}
+	}
+
+	.hidden {
+		display: none;
+	}
+}
+
+.static-stats {
+	display: none;
+}
+
+@media all and (min-width: 1024px) {
+	.static-stats {
+		display: block;
+		position: fixed;
+		bottom: 0;
+		right: 5%;
+		background-color: lighten($secondary-color, 20%);
+		font-size: larger;
+		font-weight: bold;
+		padding: 0 2em;
+		border-radius: 10px 10px 0 0;
+	}
+
+	#photographer-price {
+		margin-left: 3em;
+	}
+}
+
+
 
 
 
@@ -26,6 +89,7 @@
 	@include center-vertical-position;
 	 	left: 50%;
 		width: 80%;
+		
 	}
 
 	.fa-chevron-right {
@@ -46,9 +110,9 @@
 
 
 .img-block {
-	text-align: right;
-	margin-top: -11em;
-	margin-bottom: 5em;
+	position: absolute;
+	top: 18%;
+	right: 5vw;
 
 	.tiles-items--photo {
 		width: 120px;
@@ -69,6 +133,7 @@
 	.container-tags {
 		font-size: 0.9em;
 		font-weight: 500;
+		margin-bottom: 3em;
 	}
 }
 
@@ -81,6 +146,7 @@
 
 		.img-block {
 			margin-bottom: 0;
+			right: 10vw;
 
 			img {
 				width: 180px;

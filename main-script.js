@@ -31,23 +31,23 @@ function attr(element, attrName, attrValue) {
 
 
 ajaxGet("http://localhost/P6_OC/FishEyeDataFR.json", function(response) {
-	var photos = JSON.parse(response);
+	var response = JSON.parse(response);
 
-	for (var i = 0; i<photos.photographers.length; i++) {
+	for (var i = 0; i<response.photographers.length; i++) {
 		//create img element to store the picture
 		var imgSamplePhoto = create("img");
 		//fetch sample image for each photographer using id
-		var photographerId = photos.photographers[i].id;
-		for (var j = 0; j<photos.media.length; j++) {
-			var mediaPhotographerId = photos.media[j].photographerId;
+		var photographerId = response.photographers[i].id;
+		for (var j = 0; j<response.media.length; j++) {
+			var mediaPhotographerId = response.media[j].photographerId;
 
-			if(photographerId == mediaPhotographerId && photos.media[j].hasOwnProperty("image")) {
-				imgSamplePhoto.src = 'sass-partials/images/' + photos.media[j].image;
+			if(photographerId == mediaPhotographerId && response.media[j].hasOwnProperty("image")) {
+				imgSamplePhoto.src = 'sass-partials/images/' + response.media[j].image;
 				break;
 			}
 		}
 		//image alt text
-		var photoName = photos.photographers[i].name;
+		var photoName = response.photographers[i].name;
 		var altText = "Photo par " + photoName;
 		attr(imgSamplePhoto, "alt", altText);
 		//image style
@@ -75,19 +75,19 @@ ajaxGet("http://localhost/P6_OC/FishEyeDataFR.json", function(response) {
 
 		//fetch photographer location
 		var photographerLocation = create("h3");
-		photographerLocation.textContent = photos.photographers[i].city + ", " + photos.photographers[i].country;
+		photographerLocation.textContent = response.photographers[i].city + ", " + response.photographers[i].country;
 		//location style
 		attr(photographerLocation, "class", "tiles-items--location");
 
 		//fetch tagline
 		var photographerTagline = create("p");
-		photographerTagline.textContent = photos.photographers[i].tagline;
+		photographerTagline.textContent = response.photographers[i].tagline;
 		//tagline style
 		attr(photographerTagline, "class", "tiles-items--tagline");
 
 		//fetch price
 		var photographerPrice = create("p");
-		photographerPrice.textContent = photos.photographers[i].price + "€/jour";
+		photographerPrice.textContent = response.photographers[i].price + "€/jour";
 		//price style
 		attr(photographerPrice, "class", "tiles-items--price");
 
@@ -95,15 +95,20 @@ ajaxGet("http://localhost/P6_OC/FishEyeDataFR.json", function(response) {
 		var photographerTags = create("ul");
 		attr(photographerTags, "class", "container-tags container-tags--individual");
 		//loop through each tags
-		for (var k = 0; k<photos.photographers[i].tags.length; k++) {
+		for (var k = 0; k<response.photographers[i].tags.length; k++) {
 			var photographerTagsItems = create("li");
-			photographerTagsItems.textContent = "#" + photos.photographers[i].tags[k];
+			photographerTagsItems.textContent = "#" + response.photographers[i].tags[k];
 			attr(photographerTagsItems, "value", photographerTagsItems.textContent);
 			//tags style
 			attr(photographerTagsItems, "class", "container-tags--items photographer-tags");
 			attr(photographerTagsItems, "tabindex", 0);
-			//tags position
+			//tags for screen reader
+			var srOnlyTags = create("span");
+			srOnlyTags.textContent = response.photographers[i].tags[k];
+			attr(srOnlyTags, "class", "sr-only");
+			//put into DOM
 			photographerTags.appendChild(photographerTagsItems);
+			photographerTags.appendChild(srOnlyTags);
 		}
 
 		//filter functionality for each tag button
@@ -125,8 +130,14 @@ ajaxGet("http://localhost/P6_OC/FishEyeDataFR.json", function(response) {
 					tag.parentElement.style.display = "none";
 				}
 				}
+				})
 			})
-		})
+			//on click enter
+			item.addEventListener("keyup", function(e) {
+				if (e.keyCode === 13) {
+					item.click();
+				}
+			})
 		})
 		
 		var tilesItems = document.createElement("article");
@@ -162,7 +173,15 @@ navigationTags.forEach(item => {
 			}
 			}
 		})
-})
+		//item.style.backgroundColor = "#e18d7a";
+	})
+
+	//on click enter
+	item.addEventListener("keyup", function(e) {
+		if (e.keyCode === 13) {
+			item.click();
+		}
+	})
 });
 
 

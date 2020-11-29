@@ -30,18 +30,37 @@
 			
 		</section>
 
+		<nav class="sort">
+			<p>Trier par</p>
+			<ul class="sort-content">
+				<li class="sort-content--item">Popularité</li>
+				<div class="hidden">
+					<li class="sort-content--item">Date</li>
+					<li class="sort-content--item">Titre</li>
+				</div>
+			</ul>
+		</nav>
+
 
 		<section id="photo-tiles">
 			
 		</section>
 
-		<section id="modal-bg">
-			<i class="close fas fa-times" title="Close dialog"></i>
-			<i class="fas fa-chevron-left" title="Previous image"></i>
-			<i class="fas fa-chevron-right" title="Next image"></i>
+		<section class="static-stats">
+			<p>297 081 <i class="fas fa-heart"></i>
+				<span id="photographer-price"></span>€ / jour
+			</p>
 		</section>
 
-		<button type="button" id="contact-btn" class="btn">Contactez-moi</button>
+		<section id="modal-bg">
+			<i id="close-modal-media" class="close fas fa-times" title="Close dialog"></i>
+			<i id="prev-img" class="fas fa-chevron-left" title="Previous image"></i>
+			<i id="next-img" class="fas fa-chevron-right" title="Next image"></i>
+		</section>
+
+		<button type="button" id="contact-btn" class="btn">Contactez-moi
+			<span class="sr-only">Contact Me</span>
+		</button>
 
 		<section id="bg-form-modal">
 			<div class="modal-form-content">
