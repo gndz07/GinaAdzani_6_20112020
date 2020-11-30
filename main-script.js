@@ -30,7 +30,7 @@ function attr(element, attrName, attrValue) {
 }
 
 
-ajaxGet("http://localhost/P6_OC/FishEyeDataFR.json", function(response) {
+ajaxGet("./FishEyeDataFR.json", function(response) {
 	var response = JSON.parse(response);
 
 	for (var i = 0; i<response.photographers.length; i++) {
@@ -58,7 +58,7 @@ ajaxGet("http://localhost/P6_OC/FishEyeDataFR.json", function(response) {
 		attr(pageLink, "href", "photographer-page.html?name=" + photoName.replaceAll(" ", "_"));
 		//make sample photo as child of link element
 		pageLink.appendChild(imgSamplePhoto);
-		attr(pageLink, "tabindex", "0");
+		
 
 		//fetch photographer name
 		var photographerName = create("h2");
@@ -69,6 +69,7 @@ ajaxGet("http://localhost/P6_OC/FishEyeDataFR.json", function(response) {
 		//make division for link to photographer pages
 		var tilesLink = create("div");
 		attr(tilesLink, "class", "tiles-items--link");
+		attr(tilesLink, "tabindex", "0");
 		tilesLink.appendChild(pageLink);
 		tilesLink.appendChild(photographerName);
 

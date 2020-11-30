@@ -30,7 +30,7 @@ function attr(element, attrName, attrValue) {
 
 //call ajax function to start create elements
 //header element (photographer profile)
-ajaxCall("GET", "http://localhost/P6_OC/FishEyeDataFR.json", function(response) {
+ajaxCall("GET", "./FishEyeDataFR.json", function(response) {
 	var response = JSON.parse(response);
 
 	var pageTitle = document.querySelector("title")
@@ -70,9 +70,10 @@ ajaxCall("GET", "http://localhost/P6_OC/FishEyeDataFR.json", function(response) 
 			for (var k = 0; k<response.photographers[i].tags.length; k++) {
 				var photographerTagsItems = create("li");
 				photographerTagsItems.textContent = "#" + response.photographers[i].tags[k];
-				attr(photographerTagsItems, "value", photographerTagsItems.textContent);
+				attr(photographerTagsItems, "value", response.photographers[i].tags[k]);
 				//tags style
-				attr(photographerTagsItems, "class", "container-tags--items");
+				attr(photographerTagsItems, "class", "container-tags--items photographer-tags");
+				attr(photographerTagsItems, "tabindex", "0");
 				//tags for screen reader
 				var srOnlyTags = create("span");
 				srOnlyTags.textContent = response.photographers[i].tags[k];
@@ -101,6 +102,10 @@ ajaxCall("GET", "http://localhost/P6_OC/FishEyeDataFR.json", function(response) 
 			//div for picture
 			var imgBlock = create("div");
 			attr(imgBlock, "class", "img-block");
+			//photographer price
+			//DOM for price
+			var photographerPrice = document.getElementById("photographer-price");
+			photographerPrice.textContent = response.photographers[i].price;
 
 
 
@@ -113,6 +118,8 @@ ajaxCall("GET", "http://localhost/P6_OC/FishEyeDataFR.json", function(response) 
 
 			idBlock.appendChild(dataBlock);
 			idBlock.appendChild(imgBlock);
+			//array to store the likes number
+			var eachLikesNum = [];
 
 			//media content
 			var tiles = document.getElementById("photo-tiles");
@@ -197,9 +204,10 @@ ajaxCall("GET", "http://localhost/P6_OC/FishEyeDataFR.json", function(response) 
 							modalImg.src = "fisheye_logo.PNG";
 					}
 					
-					
-
-					
+					//get the tag of each picture
+					var mediaTag = create("p");
+					mediaTag.textContent = response.media[j].tags;
+					attr(mediaTag, "class", "tags--individual sr-only");
 					
 					
 
@@ -214,6 +222,14 @@ ajaxCall("GET", "http://localhost/P6_OC/FishEyeDataFR.json", function(response) 
 					//likes icon
 					var likesIcon = create("i");
 					attr(likesIcon, "class", "fas fa-heart tiles--details--likes--icon");
+					//on click the icon, +1 like
+					likesIcon.onclick = function() {
+						this.previousSibling.textContent++;
+						var totalLikes = document.getElementById("photographer-total-likes");
+						totalLikes.textContent++;
+					}
+					//push to global var of likes
+					eachLikesNum.push(parseInt(likes.textContent, 10));
 
 
 					//media details block
@@ -230,6 +246,7 @@ ajaxCall("GET", "http://localhost/P6_OC/FishEyeDataFR.json", function(response) 
 					imageTiles.appendChild(mediaItems);
 					imageTiles.appendChild(mediaName);
 					imageTiles.appendChild(mediaDetails);
+					imageTiles.appendChild(mediaTag);
 					tiles.appendChild(imageTiles);
 					//modal content
 					var modalContent = create("div");
@@ -239,24 +256,29 @@ ajaxCall("GET", "http://localhost/P6_OC/FishEyeDataFR.json", function(response) 
 					//modalBg.appendChild(modalContent);
 				}
 
-
-			}
-
-			
-
+			} //take the total likes DOM
+				var totalLikes = document.getElementById("photographer-total-likes");
+				var addAll = (acc, curValue) => acc + curValue;
+				totalLikes.textContent = eachLikesNum.reduce(addAll);
 		}
 	}
 });
-
 
 
 //DOM of contact form
 var formModalBg = document.getElementById("bg-form-modal");
 //contact button DOM
 var contactBtn = document.getElementById("contact-btn");
+//open form on click
 contactBtn.addEventListener("click", function () {
 	formModalBg.style.display = "block";
 });
+//open form on enter
+contactBtn.addEventListener("keyup", function(e) {
+	if (e.keyCode === 13) {
+		contactBtn.click();
+	}
+})
 
 //take close button
 var close = document.getElementsByClassName("close");
@@ -279,7 +301,29 @@ modalExit.onclick = function() {
 	modalBg.removeChild(modalBg.lastElementChild);
 }
 
+//tags filter function
+document.addEventListener("click", function(e) {
+	if (e.target.matches(".photographer-tags")) {
+		var tagValue = e.target.getAttribute("value");
+				var photographerTags = Array.from(document.getElementsByClassName("tags--individual"));
 
+				photographerTags.forEach(tag => {
+				if (tag.textContent == tagValue) {
+					tag.parentElement.style.display = "block";
+				} else {
+					tag.parentElement.style.display = "none";
+				}
+				})
+	}
+}, false)
+//on clicking enter
+document.addEventListener("keyup", function(e) {
+	if (e.target.matches(".photographer-tags")) {
+		if (e.keyCode === 13) {
+			e.target.click()
+		}
+	}
+}, false)
 
 
 
