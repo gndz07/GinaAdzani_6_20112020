@@ -84,11 +84,20 @@
 	overflow: scroll;
 	color: $primary-color;
 	
+	.modal-content {
+		display: none;
+		text-align: center;
+		@include center-vertical-position;
+		transform: translate(-50%, -45%);
+		left: 50%;
+	}
+	
+	.modal-media {
+		max-width: 80vw;
 
-	#modal-img {
-	@include center-vertical-position;
-	 	left: 50%;
-		width: 80%;
+	}
+
+	.modal-media-name {
 		
 	}
 
@@ -102,6 +111,21 @@
 		@include center-vertical-position;
 		margin-left: 5%;
 		font-size: xx-large;
+	}
+}
+
+@media all and (min-width: 1024px) {
+	#modal-bg {
+		.modal-media {
+			width: auto;
+			height: auto;
+			max-height: 55vw;
+		}
+
+		.close {
+			top: 5vw;
+			right: 5vw;
+		}
 	}
 }
 
@@ -123,6 +147,9 @@
 .data-block {
 	h1 {
 		margin-left: 0;
+	}
+	.tiles-items--name {
+		width: 60vw;
 	}
 	.tiles-items--location {
 		margin-left: 0;
@@ -162,6 +189,9 @@
 	}
 }
 
+#photo-tiles {
+	padding-bottom: 15%;
+}
 .tiles {
 	color: $primary-color;
 	font-size: 0.9em;
@@ -207,6 +237,7 @@
 		display: flex;
 		flex-wrap: wrap;
 		justify-content: space-around;
+		padding-bottom: 5%;
 
 		.tiles {
 			width: 30%;

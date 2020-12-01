@@ -30,7 +30,7 @@ function attr(element, attrName, attrValue) {
 
 //call ajax function to start create elements
 //header element (photographer profile)
-ajaxCall("GET", "./FishEyeDataFR.json", function(response) {
+ajaxCall("GET", "http://localhost/P6_OC/FishEyeDataFR.json", function(response) {
 	var response = JSON.parse(response);
 
 	var pageTitle = document.querySelector("title")
@@ -175,34 +175,6 @@ ajaxCall("GET", "./FishEyeDataFR.json", function(response) {
 					var allModalImg = document.getElementsByClassName("modal-content");
 					var modalBg = document.getElementById("modal-bg");
 
-
-					
-					
-					
-					//trigger the modal appearance
-					var modalBg = document.getElementById("modal-bg");
-					mediaItems.addEventListener("click", function() {
-						if (this.tagName.toLowerCase() == "img") {
-							//create image inside the modal
-							var modalImg = create("img");
-						} else if (this.tagName.toLowerCase() == "video") {
-							//create video inside the modal
-							var modalImg = create("video");
-							modalImg.controls = true;
-						}
-						//take modal element
-						var modalBg = document.getElementById("modal-bg");
-						modalBg.appendChild(modalImg);
-						attr(modalImg, "id", "modal-img");
-						modalBg.style.display = "block";
-						modalImg.src = this.src;
-					});
-
-					var nextImg = document.getElementById("next-img");
-						nextImg.onclick = function() {
-							modalImg = document.getElementById("modal-img");
-							modalImg.src = "fisheye_logo.PNG";
-					}
 					
 					//get the tag of each picture
 					var mediaTag = create("p");
@@ -253,7 +225,7 @@ ajaxCall("GET", "./FishEyeDataFR.json", function(response) {
 					attr(modalContent, "class", "modal-content");
 					modalContent.appendChild(mediaModal);
 					modalContent.appendChild(mediaModalName);
-					//modalBg.appendChild(modalContent);
+					modalBg.appendChild(modalContent);
 				}
 
 			} //take the total likes DOM
@@ -290,16 +262,10 @@ function exit(i, element) {
 }
 //DOM of lightbox
 var modalBg = document.getElementById("modal-bg");
-//exit(0, modalBg);
+exit(0, modalBg);
 exit(1, formModalBg);
 exit(2, formModalBg);
 
-//modal media close button
-var modalExit = document.getElementById("close-modal-media");
-modalExit.onclick = function() {
-	modalBg.style.display = "none";
-	modalBg.removeChild(modalBg.lastElementChild);
-}
 
 //tags filter function
 document.addEventListener("click", function(e) {
@@ -324,11 +290,6 @@ document.addEventListener("keyup", function(e) {
 		}
 	}
 }, false)
-
-
-
-
-
 
 
 //name on the contact form
@@ -472,6 +433,45 @@ function validateForm () {
  	document.querySelector("form").reset();
  	successMessage.style.display = "none";
  };
+
+
+ //image modals
+//class of photo tiles (initial size)
+var medias = Array.from(document.getElementsByClassName("tiles--img"));
+//modal images
+
+document.addEventListener("click", function(e) {
+	if (e.target.matches(".tiles--img")) {
+		document.getElementById("modal-bg").style.display = "block";
+		var picName = e.target.nextSibling.textContent;
+		
+		var modalMediaName = Array.from(document.getElementsByClassName("modal-media-name"));
+		modalMediaName.forEach(name => {
+			if (picName == name.textContent) {
+				name.parentElement.style.display = "block";
+			} else {
+				name.parentElement.style.display = "none";
+			}
+		})		
+	}
+}, false)
+
+
+
+/*//var slideIndex = 0;
+function showSlides(n) {
+	var modalMedia = Array.from(document.getElementsByClassName("modal-content"));
+
+ 	for (i = 0; i < modalMedia.length; i++) {
+   		modalMedia[i].style.display = "none";
+  	}
+  	modalMedia[n].style.display = "block";
+}*/
+
+
+
+
+
 
 
 

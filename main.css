@@ -53,7 +53,7 @@ body {
 }
 .close {
   position: absolute;
-  top: 2.5em;
+  top: 15vw;
   right: 1em;
   cursor: pointer;
   font-size: xx-large;
@@ -272,14 +272,19 @@ body {
   overflow: scroll;
   color: #901C1C;
 }
-#modal-bg #modal-img {
+#modal-bg .modal-content {
+  display: none;
+  text-align: center;
   margin: 0;
   position: absolute;
   top: 50%;
   transform: translate(-50%, -50%);
   display: block;
+  transform: translate(-50%, -45%);
   left: 50%;
-  width: 80%;
+}
+#modal-bg .modal-media {
+  max-width: 80vw;
 }
 #modal-bg .fa-chevron-right {
   margin: 0;
@@ -300,6 +305,17 @@ body {
   font-size: xx-large;
 }
 
+@media all and (min-width: 1024px) {
+  #modal-bg .modal-media {
+    width: auto;
+    height: auto;
+    max-height: 55vw;
+  }
+  #modal-bg .close {
+    top: 5vw;
+    right: 5vw;
+  }
+}
 .img-block {
   position: absolute;
   top: 18%;
@@ -312,6 +328,9 @@ body {
 
 .data-block h1 {
   margin-left: 0;
+}
+.data-block .tiles-items--name {
+  width: 60vw;
 }
 .data-block .tiles-items--location {
   margin-left: 0;
@@ -344,6 +363,10 @@ body {
     justify-content: flex-start;
   }
 }
+#photo-tiles {
+  padding-bottom: 15%;
+}
+
 .tiles {
   color: #901C1C;
   font-size: 0.9em;
@@ -376,6 +399,7 @@ body {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-around;
+    padding-bottom: 5%;
   }
   #photo-tiles .tiles {
     width: 30%;
