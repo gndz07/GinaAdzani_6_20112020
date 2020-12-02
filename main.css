@@ -24,7 +24,7 @@ body {
   border: solid 1px #e1e1e1;
   border-radius: 1.5em;
   padding: 5px 10px;
-  margin-right: 10px;
+  margin-right: 5px;
   cursor: pointer;
 }
 
@@ -260,7 +260,7 @@ body {
     margin-left: 3em;
   }
 }
-#modal-bg {
+.modal-bg {
   display: none;
   position: fixed;
   z-index: 2;
@@ -272,7 +272,7 @@ body {
   overflow: scroll;
   color: #901C1C;
 }
-#modal-bg .modal-content {
+.modal-bg .modal-content {
   display: none;
   text-align: center;
   margin: 0;
@@ -283,10 +283,14 @@ body {
   transform: translate(-50%, -45%);
   left: 50%;
 }
-#modal-bg .modal-media {
-  max-width: 80vw;
+.modal-bg .current-modal {
+  display: block;
 }
-#modal-bg .fa-chevron-right {
+.modal-bg .modal-media {
+  max-width: 80vw;
+  max-height: 60vw;
+}
+.modal-bg .fa-chevron-right {
   margin: 0;
   position: absolute;
   top: 50%;
@@ -295,7 +299,7 @@ body {
   margin-left: 95%;
   font-size: xx-large;
 }
-#modal-bg .fa-chevron-left {
+.modal-bg .fa-chevron-left {
   margin: 0;
   position: absolute;
   top: 50%;
@@ -303,6 +307,16 @@ body {
   display: block;
   margin-left: 5%;
   font-size: xx-large;
+}
+
+.show {
+  display: block;
+}
+.show .modal-content {
+  display: none;
+}
+.show .current-modal {
+  display: block;
 }
 
 @media all and (min-width: 1024px) {

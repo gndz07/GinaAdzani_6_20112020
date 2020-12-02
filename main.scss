@@ -72,7 +72,7 @@
 
 
 
-#modal-bg {
+.modal-bg {
 	display: none; 
 	position: fixed;
 	z-index: 2;
@@ -91,10 +91,15 @@
 		transform: translate(-50%, -45%);
 		left: 50%;
 	}
+
+	.current-modal {
+		display: block;
+	}
+
 	
 	.modal-media {
 		max-width: 80vw;
-
+		max-height: 60vw;
 	}
 
 	.modal-media-name {
@@ -111,6 +116,17 @@
 		@include center-vertical-position;
 		margin-left: 5%;
 		font-size: xx-large;
+	}
+}
+.show {
+	display: block;
+
+	.modal-content {
+		display: none;
+	}
+
+	.current-modal{
+		display: block;
 	}
 }
 

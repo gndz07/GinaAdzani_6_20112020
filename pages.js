@@ -30,7 +30,7 @@ function attr(element, attrName, attrValue) {
 
 //call ajax function to start create elements
 //header element (photographer profile)
-ajaxCall("GET", "http://localhost/P6_OC/FishEyeDataFR.json", function(response) {
+ajaxCall("GET", "./FishEyeDataFR.json", function(response) {
 	var response = JSON.parse(response);
 
 	var pageTitle = document.querySelector("title")
@@ -173,7 +173,7 @@ ajaxCall("GET", "http://localhost/P6_OC/FishEyeDataFR.json", function(response) 
 					
 					var initialMedia = document.getElementsByClassName("tiles--img");
 					var allModalImg = document.getElementsByClassName("modal-content");
-					var modalBg = document.getElementById("modal-bg");
+					var modalBg = document.getElementsByClassName("modal-bg");
 
 					
 					//get the tag of each picture
@@ -225,7 +225,7 @@ ajaxCall("GET", "http://localhost/P6_OC/FishEyeDataFR.json", function(response) 
 					attr(modalContent, "class", "modal-content");
 					modalContent.appendChild(mediaModal);
 					modalContent.appendChild(mediaModalName);
-					modalBg.appendChild(modalContent);
+					modalBg[0].appendChild(modalContent);
 				}
 
 			} //take the total likes DOM
@@ -261,8 +261,8 @@ function exit(i, element) {
 	})
 }
 //DOM of lightbox
-var modalBg = document.getElementById("modal-bg");
-exit(0, modalBg);
+var modalBg = document.getElementsByClassName("modal-bg");
+//exit(0, modalBg[0]);
 exit(1, formModalBg);
 exit(2, formModalBg);
 
@@ -442,33 +442,47 @@ var medias = Array.from(document.getElementsByClassName("tiles--img"));
 
 document.addEventListener("click", function(e) {
 	if (e.target.matches(".tiles--img")) {
-		document.getElementById("modal-bg").style.display = "block";
+		document.getElementsByClassName("modal-bg")[0].classList.add("show");
 		var picName = e.target.nextSibling.textContent;
 		
 		var modalMediaName = Array.from(document.getElementsByClassName("modal-media-name"));
 		modalMediaName.forEach(name => {
 			if (picName == name.textContent) {
-				name.parentElement.style.display = "block";
+				name.parentElement.classList.add("current-modal");
 			} else {
-				name.parentElement.style.display = "none";
+				name.parentElement.classList.remove("current-modal");
 			}
 		})		
 	}
 }, false)
 
+//close media modal
+close[0].addEventListener("click", function() {
+	document.getElementsByClassName("modal-bg")[0].classList.remove("show");
+});
 
+//next image
 
-/*//var slideIndex = 0;
-function showSlides(n) {
-	var modalMedia = Array.from(document.getElementsByClassName("modal-content"));
+document.getElementById("next-img").addEventListener("click", function() {
+	var modalContent = document.getElementsByClassName("modal-content");
+	for (var i = 0; i<modalContent.length-1; i++) {
+		if (modalContent[i].classList.contains("current-modal")) {
+			modalContent[i].classList.remove("current-modal");
+			modalContent[i+=1].classList.add("current-modal");
+		}
+	}	
+});
 
- 	for (i = 0; i < modalMedia.length; i++) {
-   		modalMedia[i].style.display = "none";
-  	}
-  	modalMedia[n].style.display = "block";
-}*/
-
-
+//prev image
+document.getElementById("prev-img").addEventListener("click", function() {
+	var modalContent = document.getElementsByClassName("modal-content");
+	for (var i = modalContent.length - 1; i>0; i--) {
+		if (modalContent[i].classList.contains("current-modal")) {
+			modalContent[i].classList.remove("current-modal");
+			modalContent[i-=1].classList.add("current-modal");
+		}
+	}
+});
 
 
 
