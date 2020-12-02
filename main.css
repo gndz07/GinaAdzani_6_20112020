@@ -2,6 +2,16 @@
 /* salmon */
 /* grey */
 /* light grey */
+@keyframes appearance {
+  0% {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+}
 a {
   text-decoration: none;
   color: inherit;
@@ -198,16 +208,6 @@ body {
     grid-template-columns: repeat(3, 33%);
   }
 }
-@keyframes appearance {
-  0% {
-    opacity: 0;
-    transform: translateX(10px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(0px);
-  }
-}
 .sort {
   display: none;
 }
@@ -288,7 +288,6 @@ body {
 }
 .modal-bg .modal-media {
   max-width: 80vw;
-  max-height: 60vw;
 }
 .modal-bg .fa-chevron-right {
   margin: 0;
@@ -321,9 +320,8 @@ body {
 
 @media all and (min-width: 1024px) {
   #modal-bg .modal-media {
-    width: auto;
-    height: auto;
-    max-height: 55vw;
+    max-width: 80vw;
+    max-height: 60vw;
   }
   #modal-bg .close {
     top: 5vw;
@@ -384,6 +382,7 @@ body {
 .tiles {
   color: #901C1C;
   font-size: 0.9em;
+  animation: appearance 400ms;
 }
 .tiles--img {
   width: 100%;

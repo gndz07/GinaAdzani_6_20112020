@@ -1,5 +1,6 @@
 @import './sass-partials/utils/variables';
 @import './sass-partials/utils/mixins';
+@import './sass-partials/utils/keyframes';
 @import './sass-partials/base/base';
 @import './sass-partials/components/tags';
 @import './sass-partials/components/buttons';
@@ -70,8 +71,6 @@
 
 
 
-
-
 .modal-bg {
 	display: none; 
 	position: fixed;
@@ -99,7 +98,6 @@
 	
 	.modal-media {
 		max-width: 80vw;
-		max-height: 60vw;
 	}
 
 	.modal-media-name {
@@ -133,9 +131,8 @@
 @media all and (min-width: 1024px) {
 	#modal-bg {
 		.modal-media {
-			width: auto;
-			height: auto;
-			max-height: 55vw;
+			max-width: 80vw;
+			max-height: 60vw;
 		}
 
 		.close {
@@ -144,9 +141,6 @@
 		}
 	}
 }
-
-
-
 
 
 .img-block {
@@ -211,6 +205,8 @@
 .tiles {
 	color: $primary-color;
 	font-size: 0.9em;
+	animation: appearance 400ms;
+
 	&--img {
 		width: 100%;
 		height: 250px;

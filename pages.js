@@ -30,7 +30,7 @@ function attr(element, attrName, attrValue) {
 
 //call ajax function to start create elements
 //header element (photographer profile)
-ajaxCall("GET", "./FishEyeDataFR.json", function(response) {
+ajaxCall("GET", "http://localhost/P6_OC/FishEyeDataFR.json", function(response) {
 	var response = JSON.parse(response);
 
 	var pageTitle = document.querySelector("title")
@@ -164,6 +164,7 @@ ajaxCall("GET", "./FishEyeDataFR.json", function(response) {
 					}
 					//media on initial size
 					attr(mediaItems, "class", "tiles--img");
+					attr(mediaItems, "tabindex", "0");
 					attr(mediaName, "class", "tiles--name");
 
 					//on modal
@@ -214,7 +215,7 @@ ajaxCall("GET", "./FishEyeDataFR.json", function(response) {
 					
 					//DOM
 					var imageTiles = create("article");
-					imageTiles.setAttribute("class", "tiles");
+					attr(imageTiles, "class", "tiles");
 					imageTiles.appendChild(mediaItems);
 					imageTiles.appendChild(mediaName);
 					imageTiles.appendChild(mediaDetails);
@@ -253,7 +254,7 @@ contactBtn.addEventListener("keyup", function(e) {
 })
 
 //take close button
-var close = document.getElementsByClassName("close");
+var close = Array.from(document.getElementsByClassName("close"));
 //function to exit modals
 function exit(i, element) {
 	close[i].addEventListener("click", function() {
@@ -438,8 +439,7 @@ function validateForm () {
  //image modals
 //class of photo tiles (initial size)
 var medias = Array.from(document.getElementsByClassName("tiles--img"));
-//modal images
-
+//open modal images
 document.addEventListener("click", function(e) {
 	if (e.target.matches(".tiles--img")) {
 		document.getElementsByClassName("modal-bg")[0].classList.add("show");
@@ -455,14 +455,27 @@ document.addEventListener("click", function(e) {
 		})		
 	}
 }, false)
+//open modal on clicking enter
+document.addEventListener("keyup", function(e) {
+	if (e.target.matches(".tiles--img")) {
+		if (e.keyCode === 13) {
+			e.target.click()
+		}
+	}
+}, false)
 
 //close media modal
 close[0].addEventListener("click", function() {
 	document.getElementsByClassName("modal-bg")[0].classList.remove("show");
 });
+//close modals by esc key
+document.addEventListener("keyup", function(e) {
+	if (e.keyCode == 27) {
+		close.forEach(close => {close.click()});
+	}
+})
 
 //next image
-
 document.getElementById("next-img").addEventListener("click", function() {
 	var modalContent = document.getElementsByClassName("modal-content");
 	for (var i = 0; i<modalContent.length-1; i++) {
@@ -472,6 +485,12 @@ document.getElementById("next-img").addEventListener("click", function() {
 		}
 	}	
 });
+//next image by right arrow
+document.addEventListener("keyup", function(e) {
+	if (e.keyCode == 39 && document.getElementsByClassName("modal-bg")[0].classList.contains("show")) {
+		document.getElementById("next-img").click();
+	}
+})
 
 //prev image
 document.getElementById("prev-img").addEventListener("click", function() {
@@ -483,6 +502,12 @@ document.getElementById("prev-img").addEventListener("click", function() {
 		}
 	}
 });
+//prev image by left arrow
+document.addEventListener("keyup", function(e) {
+	if (e.keyCode == 37 && document.getElementsByClassName("modal-bg")[0].classList.contains("show")) {
+		document.getElementById("prev-img").click();
+	}
+})
 
 
 
