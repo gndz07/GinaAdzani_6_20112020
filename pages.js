@@ -29,7 +29,7 @@ function attr(element, attrName, attrValue) {
 
 //call ajax function to start create elements
 //header element (photographer profile)
-ajaxCall("GET", "http://localhost/P6_OC/FishEyeDataFR.json", function(response) {
+ajaxCall("GET", "./FishEyeDataFR.json", function(response) {
 	var response = JSON.parse(response);
 	//give title to the page
 	var pageTitle = document.querySelector("title")
@@ -493,32 +493,43 @@ document.addEventListener("keyup", function(e) {
 	}
 })
 
+//get style of element
+function getStyle(el, name) {
+	if (document.defaultView && document.defaultView.getComputedStyle) {
+		var style = document.defaultView.getComputedStyle(el, null);
+		if (style)
+			return style[name];
+	}
+	//for IE
+	else if(el.currentStyle)
+		return el.currentStyle[name];
+}
 //sorting the elements
 //DOM of all media tiles
 var tiles = document.getElementById("photo-tiles");
-//DOM of the shown option
-var sort = document.getElementById("sort-show");
 var hidden = document.getElementById("hidden");
+//sort button
+var sortBtn = document.getElementById("sort-show");
 //open the full sorting list
-sort.addEventListener("click", function() {
-  if (hidden.style.display == "none") {
+sortBtn.addEventListener("click", function() {
+  if (getStyle(hidden, "display") == "none") {
     hidden.style.display = "block";
   } else {
     hidden.style.display = "none";
-   /* //code to sort by popularity
+    //code to sort by popularity
     //DOM of children to be sorted
 	var toSort = tiles.querySelectorAll(".tiles");
 	//sort by popularity and return the sorted content back to DOM
 	Array.prototype.map.call(toSort, function(node) {
 		return {
 			node: node,
-			popularity: node.querySelector(".tiles--details--likes--number")
+			popularity: node.querySelector(".tiles--details--likes--number").textContent
 		};
 	}).sort(function(a,b) {
-		return a.popularity > b.popularity ? 1 : -1;
+		return a.popularity - b.popularity;
 	}).forEach(function(item) {
 		tiles.appendChild(item.node);
-	})*/
+	})
 	hidden.style.display = "none";
   }
 })
