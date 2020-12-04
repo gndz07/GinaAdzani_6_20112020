@@ -12,7 +12,6 @@ function ajaxCall(reqType, url, callback) {
 	request.addEventListener("error", function() {
 		console.error("Error");
 	});
-
 	request.send(null); 
 }
 //element creation function
@@ -32,7 +31,7 @@ function attr(element, attrName, attrValue) {
 //header element (photographer profile)
 ajaxCall("GET", "http://localhost/P6_OC/FishEyeDataFR.json", function(response) {
 	var response = JSON.parse(response);
-
+	//give title to the page
 	var pageTitle = document.querySelector("title")
 	pageTitle.textContent = nameFromUrl;
 
@@ -50,7 +49,6 @@ ajaxCall("GET", "http://localhost/P6_OC/FishEyeDataFR.json", function(response) 
 			attr(photographerName, "class", "tiles-items--name");
 			//put into the parent element
 			
-
 			//fetch photographer location
 			var photographerLocation = create("h2");
 			photographerLocation.textContent = response.photographers[i].city + ", " + response.photographers[i].country;
@@ -82,7 +80,6 @@ ajaxCall("GET", "http://localhost/P6_OC/FishEyeDataFR.json", function(response) 
 				photographerTags.appendChild(photographerTagsItems);
 				photographerTags.appendChild(srOnlyTags);
 			}
-
 			//create img element to store the picture
 			var imgSamplePhoto = create("img");
 			//fetch sample image for each photographer using id
@@ -106,8 +103,6 @@ ajaxCall("GET", "http://localhost/P6_OC/FishEyeDataFR.json", function(response) 
 			//DOM for price
 			var photographerPrice = document.getElementById("photographer-price");
 			photographerPrice.textContent = response.photographers[i].price;
-
-
 
 			//put all elements on to the document
 			dataBlock.appendChild(photographerName);
@@ -171,19 +166,15 @@ ajaxCall("GET", "http://localhost/P6_OC/FishEyeDataFR.json", function(response) 
 					attr(mediaModal, "class", "modal-media");
 					attr(mediaModalName, "class", "modal-media-name");
 
-					
 					var initialMedia = document.getElementsByClassName("tiles--img");
 					var allModalImg = document.getElementsByClassName("modal-content");
 					var modalBg = document.getElementsByClassName("modal-bg");
 
-					
 					//get the tag of each picture
 					var mediaTag = create("p");
 					mediaTag.textContent = response.media[j].tags;
 					attr(mediaTag, "class", "tags--individual sr-only");
 					
-					
-
 					//media prices
 					var price = create("p");
 					price.textContent = response.media[j].price + "€";
@@ -204,7 +195,6 @@ ajaxCall("GET", "http://localhost/P6_OC/FishEyeDataFR.json", function(response) 
 					//push to global var of likes
 					eachLikesNum.push(parseInt(likes.textContent, 10));
 
-
 					//media details block
 					var mediaDetails = create("div");
 					attr(mediaDetails, "class", "tiles--details");
@@ -216,6 +206,7 @@ ajaxCall("GET", "http://localhost/P6_OC/FishEyeDataFR.json", function(response) 
 					//DOM
 					var imageTiles = create("article");
 					attr(imageTiles, "class", "tiles");
+					attr(imageTiles, "date-taken", response.media[j].date);
 					imageTiles.appendChild(mediaItems);
 					imageTiles.appendChild(mediaName);
 					imageTiles.appendChild(mediaDetails);
@@ -228,7 +219,6 @@ ajaxCall("GET", "http://localhost/P6_OC/FishEyeDataFR.json", function(response) 
 					modalContent.appendChild(mediaModalName);
 					modalBg[0].appendChild(modalContent);
 				}
-
 			} //take the total likes DOM
 				var totalLikes = document.getElementById("photographer-total-likes");
 				var addAll = (acc, curValue) => acc + curValue;
@@ -252,7 +242,6 @@ contactBtn.addEventListener("keyup", function(e) {
 		contactBtn.click();
 	}
 })
-
 //take close button
 var close = Array.from(document.getElementsByClassName("close"));
 //function to exit modals
@@ -263,10 +252,8 @@ function exit(i, element) {
 }
 //DOM of lightbox
 var modalBg = document.getElementsByClassName("modal-bg");
-//exit(0, modalBg[0]);
 exit(1, formModalBg);
 exit(2, formModalBg);
-
 
 //tags filter function
 document.addEventListener("click", function(e) {
@@ -420,7 +407,6 @@ function validateForm () {
  		successMessage.style.display = "block";
 
  	}
-
  	return valid;
  }
 
@@ -436,9 +422,7 @@ function validateForm () {
  };
 
 
- //image modals
-//class of photo tiles (initial size)
-var medias = Array.from(document.getElementsByClassName("tiles--img"));
+//image modals
 //open modal images
 document.addEventListener("click", function(e) {
 	if (e.target.matches(".tiles--img")) {
@@ -509,8 +493,70 @@ document.addEventListener("keyup", function(e) {
 	}
 })
 
+//sorting the elements
+//DOM of all media tiles
+var tiles = document.getElementById("photo-tiles");
+//DOM of the shown option
+var sort = document.getElementById("sort-show");
+var hidden = document.getElementById("hidden");
+//open the full sorting list
+sort.addEventListener("click", function() {
+  if (hidden.style.display == "none") {
+    hidden.style.display = "block";
+  } else {
+    hidden.style.display = "none";
+   /* //code to sort by popularity
+    //DOM of children to be sorted
+	var toSort = tiles.querySelectorAll(".tiles");
+	//sort by popularity and return the sorted content back to DOM
+	Array.prototype.map.call(toSort, function(node) {
+		return {
+			node: node,
+			popularity: node.querySelector(".tiles--details--likes--number")
+		};
+	}).sort(function(a,b) {
+		return a.popularity > b.popularity ? 1 : -1;
+	}).forEach(function(item) {
+		tiles.appendChild(item.node);
+	})*/
+	hidden.style.display = "none";
+  }
+})
 
+//sorting function
+//sort by date
+document.getElementById("sort-date").onclick = function() {
+	//DOM of children to be sorted
+	var toSort = tiles.querySelectorAll(".tiles");
+	//sort by date and return the sorted content back to DOM
+	Array.prototype.map.call(toSort, function(node) {
+		return {
+			node: node,
+			date: node.getAttribute("date-taken").replaceAll("-", "")
+		};
+	}).sort(function(a,b) {
+		return a.date > b.date ? 1 : -1;
+	}).forEach(function(item) {
+		tiles.appendChild(item.node);
+	});
 
+	hidden.style.display = "none";
+}
 
-
-
+//sort by name
+document.getElementById("sort-name").onclick = function() {
+	//DOM of children to be sorted
+	var toSort = tiles.querySelectorAll(".tiles");
+	//sort by name and return the sorted content back to DOM
+	Array.prototype.map.call(toSort, function(node) {
+		return {
+			node: node,
+			name: node.querySelector(".tiles--name").textContent
+		};
+	}).sort(function(a,b) {
+		return a.name.localeCompare(b.name);
+	}).forEach(function(item) {
+		tiles.appendChild(item.node);
+	});
+	hidden.style.display = "none";
+}
