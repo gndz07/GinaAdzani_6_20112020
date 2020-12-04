@@ -319,11 +319,11 @@ body {
 }
 
 @media all and (min-width: 1024px) {
-  #modal-bg .modal-media {
+  .modal-bg .modal-media {
     max-width: 80vw;
     max-height: 60vw;
   }
-  #modal-bg .close {
+  .modal-bg .close {
     top: 5vw;
     right: 5vw;
   }
