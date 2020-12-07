@@ -157,11 +157,20 @@ ajaxGet("http://localhost/P6_OC/FishEyeDataFR.json", function(response) {
 
 //get tags elements on navigation bar
 var navigationTags = Array.from(document.getElementsByClassName("navigation-tags"));
+//function to remove inline style attribute
+function removeStyle(toReset) {
+	for (var i = 0; i<toReset.length; i++) {
+		if (toReset[i].hasAttribute("style")) {
+			toReset[i].removeAttribute("style");
+		}
+	}
+}
 //filter function (on navigation bar)
 navigationTags.forEach(item => {
 	item.addEventListener("click", function() {
 		var tagValue = item.getAttribute("value");
 		var photographerTags = Array.from(document.getElementsByClassName("container-tags--individual"));
+		var tagItems = document.getElementsByClassName("container-tags--items");
 
 		photographerTags.forEach(tag => {
 			var tagChildren = tag.children;
@@ -174,7 +183,8 @@ navigationTags.forEach(item => {
 			}
 			}
 		})
-		//item.style.backgroundColor = "#e18d7a";
+		removeStyle(tagItems);
+		item.style.backgroundColor = "#e18d7a";
 	})
 
 	//on click enter
