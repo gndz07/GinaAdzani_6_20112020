@@ -233,10 +233,15 @@ body {
   }
   .sort-content--item {
     padding-bottom: 1em;
+    padding-right: 2em;
   }
 
   #hidden {
     display: none;
+  }
+
+  .fa-chevron-up {
+    margin: 0 -2em 0 3em;
   }
 }
 .static-stats {
@@ -320,8 +325,8 @@ body {
 
 @media all and (min-width: 1024px) {
   .modal-bg .modal-media {
-    max-width: 80vw;
-    max-height: 60vw;
+    max-width: 70vw;
+    max-height: 50vw;
   }
   .modal-bg .close {
     top: 5vw;

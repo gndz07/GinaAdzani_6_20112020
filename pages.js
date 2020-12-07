@@ -29,7 +29,7 @@ function attr(element, attrName, attrValue) {
 
 //call ajax function to start create elements
 //header element (photographer profile)
-ajaxCall("GET", "./FishEyeDataFR.json", function(response) {
+ajaxCall("GET", "http://localhost/P6_OC/FishEyeDataFR.json", function(response) {
 	var response = JSON.parse(response);
 	//give title to the page
 	var pageTitle = document.querySelector("title")
@@ -159,11 +159,13 @@ ajaxCall("GET", "./FishEyeDataFR.json", function(response) {
 					}
 					//media on initial size
 					attr(mediaItems, "class", "tiles--img");
+					attr(mediaItems, "alt", response.media[j].alt);
 					attr(mediaItems, "tabindex", "0");
 					attr(mediaName, "class", "tiles--name");
 
 					//on modal
 					attr(mediaModal, "class", "modal-media");
+					attr(mediaModal, "alt", response.media[j].alt);
 					attr(mediaModalName, "class", "modal-media-name");
 
 					var initialMedia = document.getElementsByClassName("tiles--img");
@@ -516,8 +518,29 @@ sortBtn.addEventListener("click", function() {
     hidden.style.display = "block";
   } else {
     hidden.style.display = "none";
-    //code to sort by popularity
-    //DOM of children to be sorted
+  }
+})
+
+//sorting function
+//DOM of the selected sort function
+var sortBy = document.getElementById("sort-by");
+//DOM of sort buttons
+var sortByLikes = document.getElementById("sort-likes");
+var sortByDate = document.getElementById("sort-date");
+var sortByName = document.getElementById("sort-name");
+//class DOM of the sort button
+var sortOptions = document.getElementsByClassName("sort-content--item");
+//function to remove inline style attribute
+function removeStyle(toReset) {
+	for (var i = 0; i<toReset.length; i++) {
+		if (toReset[i].hasAttribute("style")) {
+			toReset[i].removeAttribute("style");
+		}
+	}
+}
+//sort by popularity
+sortByLikes.onclick = function() {
+	//DOM of children to be sorted
 	var toSort = tiles.querySelectorAll(".tiles");
 	//sort by popularity and return the sorted content back to DOM
 	Array.prototype.map.call(toSort, function(node) {
@@ -530,13 +553,16 @@ sortBtn.addEventListener("click", function() {
 	}).forEach(function(item) {
 		tiles.appendChild(item.node);
 	})
-	hidden.style.display = "none";
-  }
-})
+	hidden.removeAttribute("style");
+	removeStyle(sortOptions);
+	//show the selected filter
+	sortBy.textContent = "Popularité";
+	sortByLikes.style.display = "none";
+}
 
-//sorting function
+	
 //sort by date
-document.getElementById("sort-date").onclick = function() {
+sortByDate.onclick = function() {
 	//DOM of children to be sorted
 	var toSort = tiles.querySelectorAll(".tiles");
 	//sort by date and return the sorted content back to DOM
@@ -550,12 +576,15 @@ document.getElementById("sort-date").onclick = function() {
 	}).forEach(function(item) {
 		tiles.appendChild(item.node);
 	});
-
-	hidden.style.display = "none";
+	hidden.removeAttribute("style");
+	removeStyle(sortOptions);
+	//show the selected filter
+	sortBy.textContent = "Date";
+	sortByDate.style.display = "none";
 }
 
 //sort by name
-document.getElementById("sort-name").onclick = function() {
+sortByName.onclick = function() {
 	//DOM of children to be sorted
 	var toSort = tiles.querySelectorAll(".tiles");
 	//sort by name and return the sorted content back to DOM
@@ -569,5 +598,9 @@ document.getElementById("sort-name").onclick = function() {
 	}).forEach(function(item) {
 		tiles.appendChild(item.node);
 	});
-	hidden.style.display = "none";
+	hidden.removeAttribute("style");
+	removeStyle(sortOptions);
+	//show the selected filter
+	sortBy.textContent = "Titre";
+	sortByName.style.display = "none";
 }
