@@ -37,6 +37,9 @@ body {
   margin-right: 5px;
   cursor: pointer;
 }
+.container-tags--items:hover {
+  background-color: #e69f8f;
+}
 
 .btn {
   position: fixed;

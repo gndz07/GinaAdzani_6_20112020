@@ -115,31 +115,8 @@ ajaxGet("http://localhost/P6_OC/FishEyeDataFR.json", function(response) {
 		//filter functionality for each tag button
 		//get the DOM of the tag element
 		var photographerTag = Array.from(document.getElementsByClassName("photographer-tags"));
-		//give event listener to each tag
-		photographerTag.forEach(item => {
-			item.addEventListener("click", function() {
-				var tagValue = item.getAttribute("value");
-				var photographerTags = Array.from(document.getElementsByClassName("container-tags--individual"));
-
-				photographerTags.forEach(tag => {
-				var tagChildren = tag.children;
-				for (var b = 0; b<tagChildren.length; b++) {
-					if (tagChildren[b].textContent.includes(tagValue)) {
-					tag.parentElement.style.display = "block";
-					break;
-				} else {
-					tag.parentElement.style.display = "none";
-				}
-				}
-				})
-			})
-			//on click enter
-			item.addEventListener("keyup", function(e) {
-				if (e.keyCode === 13) {
-					item.click();
-				}
-			})
-		})
+		//filter function on each tags
+		photographerTag.forEach(item => filterByTag(item));
 		
 		var tilesItems = document.createElement("article");
 		tilesItems.setAttribute("class", "tiles-items");
@@ -165,8 +142,8 @@ function removeStyle(toReset) {
 		}
 	}
 }
-//filter function (on navigation bar)
-navigationTags.forEach(item => {
+//filter tag function
+function filterByTag(item) {
 	item.addEventListener("click", function() {
 		var tagValue = item.getAttribute("value");
 		var photographerTags = Array.from(document.getElementsByClassName("container-tags--individual"));
@@ -186,14 +163,15 @@ navigationTags.forEach(item => {
 		removeStyle(tagItems);
 		item.style.backgroundColor = "#e18d7a";
 	})
-
 	//on click enter
 	item.addEventListener("keyup", function(e) {
 		if (e.keyCode === 13) {
 			item.click();
 		}
 	})
-});
+}
+//filter function (on navigation bar)
+navigationTags.forEach(item => filterByTag(item));
 
 
 //DOM of the top menu to bring back the main content

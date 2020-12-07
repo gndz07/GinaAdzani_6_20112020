@@ -261,15 +261,18 @@ exit(2, formModalBg);
 document.addEventListener("click", function(e) {
 	if (e.target.matches(".photographer-tags")) {
 		var tagValue = e.target.getAttribute("value");
-				var photographerTags = Array.from(document.getElementsByClassName("tags--individual"));
+		var photographerTags = Array.from(document.getElementsByClassName("tags--individual"));
+		var tagItems = document.getElementsByClassName("container-tags--items");
 
-				photographerTags.forEach(tag => {
-				if (tag.textContent == tagValue) {
-					tag.parentElement.style.display = "block";
-				} else {
-					tag.parentElement.style.display = "none";
-				}
-				})
+		photographerTags.forEach(tag => {
+			if (tag.textContent == tagValue) {
+				tag.parentElement.style.display = "block";
+			} else {
+				tag.parentElement.style.display = "none";
+			}
+		})
+		removeStyle(tagItems);
+		e.target.style.backgroundColor = "#e18d7a";
 	}
 }, false)
 //on clicking enter

@@ -11,6 +11,10 @@
 		padding: 5px 10px;
 		margin-right: 5px;
 		cursor: pointer;
+
+		&:hover {
+			background-color: lighten($secondary-color, 20%);
+		}
 	}
 	
 }
