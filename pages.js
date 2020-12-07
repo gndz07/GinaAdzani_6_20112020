@@ -176,7 +176,10 @@ ajaxCall("GET", "./FishEyeDataFR.json", function(response) {
 					var mediaTag = create("p");
 					mediaTag.textContent = response.media[j].tags;
 					attr(mediaTag, "class", "tags--individual sr-only");
-					
+					//tag for modal media
+					var mediaModalTag = create("p");
+					mediaModalTag.textContent = response.media[j].tags;
+					attr(mediaModalTag, "class", "sr-only");
 					//media prices
 					var price = create("p");
 					price.textContent = response.media[j].price + "€";
@@ -217,8 +220,11 @@ ajaxCall("GET", "./FishEyeDataFR.json", function(response) {
 					//modal content
 					var modalContent = create("div");
 					attr(modalContent, "class", "modal-content");
+					attr(modalContent, "date-taken", response.media[j].date);
+					attr(modalContent, "likes", response.media[j].likes);
 					modalContent.appendChild(mediaModal);
 					modalContent.appendChild(mediaModalName);
+					modalContent.appendChild(mediaModalTag);
 					modalBg[0].appendChild(modalContent);
 				}
 			} //take the total likes DOM
@@ -541,12 +547,13 @@ function removeStyle(toReset) {
 		}
 	}
 }
+
 //sort by popularity
 sortByLikes.onclick = function() {
 	//DOM of children to be sorted
 	var toSort = tiles.querySelectorAll(".tiles");
-	//sort by popularity and return the sorted content back to DOM
-	Array.prototype.map.call(toSort, function(node) {
+	//sort main tile by popularity and return the sorted content back to DOM
+	Array.prototype.map.call(toSort, function (node) {
 		return {
 			node: node,
 			popularity: node.querySelector(".tiles--details--likes--number").textContent
@@ -556,6 +563,20 @@ sortByLikes.onclick = function() {
 	}).forEach(function(item) {
 		tiles.appendChild(item.node);
 	})
+	//modal elements
+	var modalContent = modalBg[0].querySelectorAll(".modal-content");
+	//sort modal elements by popularity
+	Array.prototype.map.call(modalContent, function (node) {
+		return {
+			node: node,
+			popularity: node.getAttribute("likes")
+		};
+	}).sort(function(a,b) {
+		return a.popularity - b.popularity;
+	}).forEach(function(item) {
+		modalBg[0].appendChild(item.node);
+	})
+	//sort menu display
 	hidden.removeAttribute("style");
 	removeStyle(sortOptions);
 	//show the selected filter
@@ -568,17 +589,13 @@ sortByLikes.onclick = function() {
 sortByDate.onclick = function() {
 	//DOM of children to be sorted
 	var toSort = tiles.querySelectorAll(".tiles");
-	//sort by date and return the sorted content back to DOM
-	Array.prototype.map.call(toSort, function(node) {
-		return {
-			node: node,
-			date: node.getAttribute("date-taken").replaceAll("-", "")
-		};
-	}).sort(function(a,b) {
-		return a.date > b.date ? 1 : -1;
-	}).forEach(function(item) {
-		tiles.appendChild(item.node);
-	});
+	//main tiles sorting
+	sortDate(toSort, tiles);
+	//modal elements
+	var modalContent = modalBg[0].querySelectorAll(".modal-content");
+	//recall the sorting function for modal
+	sortDate(modalContent, modalBg[0]);
+	//sorting menu display control
 	hidden.removeAttribute("style");
 	removeStyle(sortOptions);
 	//show the selected filter
@@ -590,7 +607,8 @@ sortByDate.onclick = function() {
 sortByName.onclick = function() {
 	//DOM of children to be sorted
 	var toSort = tiles.querySelectorAll(".tiles");
-	//sort by name and return the sorted content back to DOM
+	
+	//sort main tile by name
 	Array.prototype.map.call(toSort, function(node) {
 		return {
 			node: node,
@@ -601,9 +619,38 @@ sortByName.onclick = function() {
 	}).forEach(function(item) {
 		tiles.appendChild(item.node);
 	});
+
+	//modal elements
+	var modalContent = modalBg[0].querySelectorAll(".modal-content");
+	//sort modal elements by name
+	Array.prototype.map.call(modalContent, function(node) {
+		return {
+			node: node,
+			name: node.querySelector(".modal-media-name").textContent
+		};
+	}).sort(function(a,b) {
+		return a.name.localeCompare(b.name);
+	}).forEach(function(item) {
+		modalBg[0].appendChild(item.node);
+	});
+	//sorting menu display control
 	hidden.removeAttribute("style");
 	removeStyle(sortOptions);
 	//show the selected filter
 	sortBy.textContent = "Titre";
 	sortByName.style.display = "none";
+}
+
+//sort by date function
+function sortDate(toSort, parentElement) {
+	Array.prototype.map.call(toSort, function (node) {
+	return {
+		node: node,
+		date: node.getAttribute("date-taken").replaceAll("-", "")
+	};
+}).sort(function(a,b) {
+	return a.date > b.date ? 1 : -1;
+}).forEach(function(item) {
+	parentElement.appendChild(item.node);
+});
 }
