@@ -179,7 +179,7 @@ ajaxCall("GET", "./FishEyeDataFR.json", function(response) {
 					//tag for modal media
 					var mediaModalTag = create("p");
 					mediaModalTag.textContent = response.media[j].tags;
-					attr(mediaModalTag, "class", "sr-only");
+					attr(mediaModalTag, "class", "modal-media-tag sr-only");
 					//media prices
 					var price = create("p");
 					price.textContent = response.media[j].price + "€";
@@ -228,9 +228,43 @@ ajaxCall("GET", "./FishEyeDataFR.json", function(response) {
 					modalBg[0].appendChild(modalContent);
 				}
 			} //take the total likes DOM
-				var totalLikes = document.getElementById("photographer-total-likes");
-				var addAll = (acc, curValue) => acc + curValue;
-				totalLikes.textContent = eachLikesNum.reduce(addAll);
+			var totalLikes = document.getElementById("photographer-total-likes");
+			var addAll = (acc, curValue) => acc + curValue;
+			totalLikes.textContent = eachLikesNum.reduce(addAll);
+
+
+			//filter DOM
+			var filterTags = Array.from(document.getElementsByClassName("photographer-tags"));
+			var modalContents = Array.from(document.getElementsByClassName("modal-content"));
+			var modalParent = Array.from(document.getElementsByClassName("modal-bg"));
+			var modalMediaTag = Array.from(document.getElementsByClassName("modal-media-tag"));
+			//filter functionality
+			filterTags.forEach(tag => {
+				tag.onclick = function() {
+					//make sure all modal elements are in place
+					modalContents.forEach(content => {
+						modalParent[0].appendChild(content);
+					})
+					//filtering main tile's content
+					var tagValue = tag.getAttribute("value");
+					var photographerTags = Array.from(document.getElementsByClassName("tags--individual"));
+					photographerTags.forEach(tag => {
+						if (tag.textContent == tagValue) {
+							tag.parentElement.style.display = "block";
+						} else {
+							tag.parentElement.style.display = "none";
+						}
+					})
+					//filtering modal contents
+					modalMediaTag.forEach(tag => {
+						if (tag.textContent != tagValue) {
+							modalParent[0].removeChild(tag.parentElement);
+						}
+					})
+					removeStyle(filterTags);
+					tag.style.backgroundColor = "#e18d7a";
+				}
+			})
 		}
 	}
 });
@@ -263,32 +297,7 @@ var modalBg = document.getElementsByClassName("modal-bg");
 exit(1, formModalBg);
 exit(2, formModalBg);
 
-//tags filter function
-document.addEventListener("click", function(e) {
-	if (e.target.matches(".photographer-tags")) {
-		var tagValue = e.target.getAttribute("value");
-		var photographerTags = Array.from(document.getElementsByClassName("tags--individual"));
-		var tagItems = document.getElementsByClassName("container-tags--items");
 
-		photographerTags.forEach(tag => {
-			if (tag.textContent == tagValue) {
-				tag.parentElement.style.display = "block";
-			} else {
-				tag.parentElement.style.display = "none";
-			}
-		})
-		removeStyle(tagItems);
-		e.target.style.backgroundColor = "#e18d7a";
-	}
-}, false)
-//on clicking enter
-document.addEventListener("keyup", function(e) {
-	if (e.target.matches(".photographer-tags")) {
-		if (e.keyCode === 13) {
-			e.target.click()
-		}
-	}
-}, false)
 
 
 //name on the contact form
@@ -416,7 +425,9 @@ function validateForm () {
  		var message = "Merci pour votre message !";
  		successMessageText.textContent = message;
  		successMessage.style.display = "block";
-
+ 		console.log("First name: " + firstName.value);
+ 		console.log("Last name: " + lastName.value);
+ 		console.log("Email: " + email.value);
  	}
  	return valid;
  }
@@ -470,14 +481,26 @@ document.addEventListener("keyup", function(e) {
 	}
 })
 
+//next button DOM
+var nextBtn = document.getElementById("next-img");
+//prev button DOM
+var prevBtn = document.getElementById("prev-img");
+
 //next image
-document.getElementById("next-img").addEventListener("click", function() {
+nextBtn.addEventListener("click", function() {
 	var modalContent = document.getElementsByClassName("modal-content");
 	for (var i = 0; i<modalContent.length-1; i++) {
 		if (modalContent[i].classList.contains("current-modal")) {
-			modalContent[i].classList.remove("current-modal");
-			modalContent[i+=1].classList.add("current-modal");
-		}
+			if (i<modalContent.length-2) {
+				modalContent[i].classList.remove("current-modal");
+				modalContent[i+=1].classList.add("current-modal");
+				prevBtn.removeAttribute("style");
+			} else {
+				modalContent[i].classList.remove("current-modal");
+				modalContent[i+=1].classList.add("current-modal");
+				nextBtn.style.display = "none";
+			}
+		} 
 	}	
 });
 //next image by right arrow
@@ -488,12 +511,19 @@ document.addEventListener("keyup", function(e) {
 })
 
 //prev image
-document.getElementById("prev-img").addEventListener("click", function() {
+prevBtn.addEventListener("click", function() {
 	var modalContent = document.getElementsByClassName("modal-content");
 	for (var i = modalContent.length - 1; i>0; i--) {
 		if (modalContent[i].classList.contains("current-modal")) {
-			modalContent[i].classList.remove("current-modal");
-			modalContent[i-=1].classList.add("current-modal");
+			if (i>1) {
+				modalContent[i].classList.remove("current-modal");
+				modalContent[i-=1].classList.add("current-modal");
+				nextBtn.removeAttribute("style");
+			} else {
+				modalContent[i].classList.remove("current-modal");
+				modalContent[i-=1].classList.add("current-modal");
+				prevBtn.style.display = "none";
+			}
 		}
 	}
 });
@@ -584,16 +614,15 @@ sortByLikes.onclick = function() {
 	sortByLikes.style.display = "none";
 }
 
-	
 //sort by date
 sortByDate.onclick = function() {
 	//DOM of children to be sorted
 	var toSort = tiles.querySelectorAll(".tiles");
-	//main tiles sorting
+	//sort main tile by date
 	sortDate(toSort, tiles);
 	//modal elements
 	var modalContent = modalBg[0].querySelectorAll(".modal-content");
-	//recall the sorting function for modal
+	//sort modal elements
 	sortDate(modalContent, modalBg[0]);
 	//sorting menu display control
 	hidden.removeAttribute("style");
@@ -607,32 +636,12 @@ sortByDate.onclick = function() {
 sortByName.onclick = function() {
 	//DOM of children to be sorted
 	var toSort = tiles.querySelectorAll(".tiles");
-	
 	//sort main tile by name
-	Array.prototype.map.call(toSort, function(node) {
-		return {
-			node: node,
-			name: node.querySelector(".tiles--name").textContent
-		};
-	}).sort(function(a,b) {
-		return a.name.localeCompare(b.name);
-	}).forEach(function(item) {
-		tiles.appendChild(item.node);
-	});
-
+	sortName(toSort, ".tiles--name", tiles);
 	//modal elements
 	var modalContent = modalBg[0].querySelectorAll(".modal-content");
 	//sort modal elements by name
-	Array.prototype.map.call(modalContent, function(node) {
-		return {
-			node: node,
-			name: node.querySelector(".modal-media-name").textContent
-		};
-	}).sort(function(a,b) {
-		return a.name.localeCompare(b.name);
-	}).forEach(function(item) {
-		modalBg[0].appendChild(item.node);
-	});
+	sortName(modalContent, ".modal-media-name", modalBg[0]);
 	//sorting menu display control
 	hidden.removeAttribute("style");
 	removeStyle(sortOptions);
@@ -654,3 +663,48 @@ function sortDate(toSort, parentElement) {
 	parentElement.appendChild(item.node);
 });
 }
+//sort by name function
+function sortName(toSort, sortReq, parentElement) {
+	Array.prototype.map.call(toSort, function(node) {
+		return {
+			node: node,
+			name: node.querySelector(sortReq).textContent
+		};
+	}).sort(function(a,b) {
+		return a.name.localeCompare(b.name);
+	}).forEach(function(item) {
+		parentElement.appendChild(item.node);
+	});
+}
+
+
+
+
+/*
+//tags filter function
+document.addEventListener("click", function(e) {
+	if (e.target.matches(".photographer-tags")) {
+		var tagValue = e.target.getAttribute("value");
+		var photographerTags = Array.from(document.getElementsByClassName("tags--individual"));
+		var tagItems = document.getElementsByClassName("container-tags--items");
+
+		photographerTags.forEach(tag => {
+			if (tag.textContent == tagValue) {
+				tag.parentElement.style.display = "block";
+			} else {
+				tag.parentElement.style.display = "none";
+			}
+		})
+		removeStyle(tagItems);
+		e.target.style.backgroundColor = "#e18d7a";
+	}
+}, false)
+//on clicking enter
+document.addEventListener("keyup", function(e) {
+	if (e.target.matches(".photographer-tags")) {
+		if (e.keyCode === 13) {
+			e.target.click()
+		}
+	}
+}, false)
+*/
