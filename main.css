@@ -234,13 +234,26 @@ body {
     cursor: pointer;
     border-radius: 8px;
   }
+  .sort-content .sort-show {
+    padding-top: 5px;
+  }
   .sort-content--item {
     padding-bottom: 1em;
     padding-right: 2em;
   }
+  .sort-content--item:nth-child(-n+2):after {
+    content: "";
+    display: block;
+    width: 143%;
+    margin: 1.5em 0 -1.3em -0.5em;
+    border-bottom: 2px solid white;
+  }
 
   #hidden {
     display: none;
+  }
+  #hidden .sort-content--item {
+    margin-top: 1em;
   }
 
   .fa-chevron-up {
