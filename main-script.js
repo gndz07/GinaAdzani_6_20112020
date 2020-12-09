@@ -31,7 +31,7 @@ function attr(element, attrName, attrValue) {
 
 
 ajaxGet("./FishEyeDataFR.json", function(response) {
-	var response = JSON.parse(response);
+	response = JSON.parse(response);
 
 	for (var i = 0; i<response.photographers.length; i++) {
 		//create img element to store the picture
@@ -41,7 +41,7 @@ ajaxGet("./FishEyeDataFR.json", function(response) {
 		for (var j = 0; j<response.media.length; j++) {
 			var mediaPhotographerId = response.media[j].photographerId;
 
-			if(photographerId == mediaPhotographerId && response.media[j].hasOwnProperty("image")) {
+			if(photographerId == mediaPhotographerId && Object.prototype.hasOwnProperty.call(response.media[j], "image")) {
 				imgSamplePhoto.src = 'sass-partials/images/' + response.media[j].image;
 				break;
 			}

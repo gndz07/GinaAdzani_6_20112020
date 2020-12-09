@@ -30,7 +30,7 @@ function attr(element, attrName, attrValue) {
 //call ajax function to start create elements
 //header element (photographer profile)
 ajaxCall("GET", "./FishEyeDataFR.json", function(response) {
-	var response = JSON.parse(response);
+	response = JSON.parse(response);
 	//give title to the page
 	var pageTitle = document.querySelector("title")
 	pageTitle.textContent = nameFromUrl;
@@ -85,9 +85,9 @@ ajaxCall("GET", "./FishEyeDataFR.json", function(response) {
 			//fetch sample image for each photographer using id
 			var photographerId = response.photographers[i].id;
 			for (var j = 0; j<response.media.length; j++) {
-				var mediaPhotographerId = response.media[j].photographerId;
+				var samplePhotoId = response.media[j].photographerId;
 
-				if(photographerId == mediaPhotographerId && response.media[j].hasOwnProperty("image")) {
+				if(photographerId == samplePhotoId && Object.prototype.hasOwnProperty.call(response.media[j], "image")) {
 					imgSamplePhoto.src = 'sass-partials/images/' + response.media[j].image;
 					break;
 				}
@@ -118,15 +118,13 @@ ajaxCall("GET", "./FishEyeDataFR.json", function(response) {
 
 			//media content
 			var tiles = document.getElementById("photo-tiles");
-			var photographerId = response.photographers[i].id;
 			//loop through the media contents
-			for (var j = 0; j<response.media.length; j++) {
+			for (j = 0; j<response.media.length; j++) {
 				var mediaPhotographerId = response.media[j].photographerId;
-				var mediaIndex = j;
 				//check if the media belonged to the same photographer
 				if (photographerId === mediaPhotographerId) {
 					//see if the media item is an image
-					if (response.media[j].hasOwnProperty("image")) {
+					if (Object.prototype.hasOwnProperty.call(response.media[j], "image")) {
 						//for initial image
 						var mediaItems = create("img");
 						mediaItems.src = 'sass-partials/images/' + response.media[j].image;
@@ -140,21 +138,21 @@ ajaxCall("GET", "./FishEyeDataFR.json", function(response) {
 						var mediaModalName = create("p");
 						mediaModalName.textContent = mediaName.textContent;
 					//if the media item is a video
-					} else if (response.media[j].hasOwnProperty("video")) {
+					} else if (Object.prototype.hasOwnProperty.call(response.media[j], "video")) {
 						//for initial video
-						var mediaItems = create("video");
+						mediaItems = create("video");
 						mediaItems.src = 'sass-partials/images/' + response.media[j].video;
 						mediaItems.controls = true;
 						//for modal video
-						var mediaModal = create("video");
+						mediaModal = create("video");
 						mediaModal.src = mediaItems.src;
 						mediaModal.controls = true;
 						//media name
-						var mediaName = create("p");
+						mediaName = create("p");
 						mediaName.textContent = response.media[j].video.replaceAll("_", " ").slice(0, -4);
 
 						//modal name
-						var mediaModalName = create("p");
+						mediaModalName = create("p");
 						mediaModalName.textContent = mediaName.textContent;
 					}
 					//media on initial size
@@ -168,8 +166,6 @@ ajaxCall("GET", "./FishEyeDataFR.json", function(response) {
 					attr(mediaModal, "alt", response.media[j].alt);
 					attr(mediaModalName, "class", "modal-media-name");
 
-					var initialMedia = document.getElementsByClassName("tiles--img");
-					var allModalImg = document.getElementsByClassName("modal-content");
 					var modalBg = document.getElementsByClassName("modal-bg");
 
 					//get the tag of each picture
@@ -318,63 +314,63 @@ var formData = Array.from(document.querySelectorAll(".form-data"));
 function showError(index, message) {
 	formData[index].setAttribute("data-error", message);
 	formData[index].setAttribute("data-error-visible", true);
-};
+}
 
 //function to hide error when input is valid
 function hideError(index) {
 	formData[index].removeAttribute("data-error");
 	formData[index].removeAttribute("data-error-visible");
-};
+}
 
 //valid condition
-valid = true;
+var valid = true;
 
 //first name validation function
 //regex for name formats, not allowing space at the start and end
 var nameRegex = /^[^\s]+(\s+[^\s]+)*$/;
 function validateFirstName() {
 	if (!nameRegex.test(firstName.value) || firstName.value.length < 2) {
- 		valid = false;
- 		message = "Veuillez entrer 2 caractères ou plus pour le champ du prénom.";
+		valid = false;
+		message = "Veuillez entrer 2 caractères ou plus pour le champ du prénom.";
 		showError(0, message);		
- 	} else {
- 		valid;
- 		hideError(0);	
- 	}
- 	return valid;
- };
+	} else {
+		valid;
+		hideError(0);	
+	}
+	return valid;
+}
 //onblur validation
 firstName.addEventListener('blur', validateFirstName);
 
 //last name validation function
 function validateLastName() {
 	if (!nameRegex.test(lastName.value) || lastName.value.length < 2) {
- 		valid = false;
- 		message = "Veuillez entrer 2 caractères ou plus pour le champ du nom.";
- 		showError(1, message);
+		valid = false;
+		message = "Veuillez entrer 2 caractères ou plus pour le champ du nom.";
+		showError(1, message);
 
- 	} else {
- 		valid;
- 		hideError(1);
- 	}
- 	return valid;
- };
+	} else {
+		valid;
+		hideError(1);
+	}
+	return valid;
+ }
  //onblur validation
 lastName.addEventListener('blur', validateLastName);
 
 //email validation function
 function validateEmail() {
 	var regexEmail = /.+@.+\..+/;
- 	if (!regexEmail.test(email.value)) {
- 		valid = false;
- 		message = "Veuillez entrer une adresse email valide.";
- 		showError(2, message);
- 	} else {
- 		valid;
- 		hideError(2);
- 	}
- 	return valid;
-};
+	if (!regexEmail.test(email.value)) {
+		valid = false;
+		message = "Veuillez entrer une adresse email valide.";
+		showError(2, message);
+	} else {
+		valid;
+		hideError(2);
+	}
+	return valid;
+}
 //onblur validation
 email.addEventListener('blur', validateEmail);
 
@@ -408,28 +404,28 @@ function validate (e) {
 
 //function to validate form onsubmit
 function validateForm () {
- 	valid = true;
- 	//first name validation
- 	validateFirstName();
- 	//last name validation
- 	validateLastName();
- 	//email validation
- 	validateEmail();
- 	//message validation
- 	validateMessage();
+valid = true;
+	//first name validation
+	validateFirstName();
+	//last name validation
+	validateLastName();
+	//email validation
+	validateEmail();
+	//message validation
+	validateMessage();
 
- 	//valid form, show success message
- 	if (valid) {
- 		var successMessage = document.getElementById("formResult");
- 		var successMessageText = document.getElementById("formResultText");
- 		var message = "Merci pour votre message !";
- 		successMessageText.textContent = message;
- 		successMessage.style.display = "block";
- 		console.log("First name: " + firstName.value);
- 		console.log("Last name: " + lastName.value);
- 		console.log("Email: " + email.value);
- 	}
- 	return valid;
+	//valid form, show success message
+	if (valid) {
+		var successMessage = document.getElementById("formResult");
+		var successMessageText = document.getElementById("formResultText");
+		var message = "Merci pour votre message !";
+		successMessageText.textContent = message;
+		successMessage.style.display = "block";
+		console.log("First name: " + firstName.value);
+		console.log("Last name: " + lastName.value);
+		console.log("Email: " + email.value);
+	}
+	return valid;
  }
 
  //Close button on modal
@@ -437,11 +433,11 @@ function validateForm () {
  var modalCloseBtn = document.getElementById("close-btn--validation");
  //redirecting to index.html on click
  modalCloseBtn.onclick = function() {
- 	var successMessage = document.getElementById("formResult");
- 	formModalBg.style.display = "none";
- 	document.querySelector("form").reset();
- 	successMessage.style.display = "none";
- };
+	var successMessage = document.getElementById("formResult");
+	formModalBg.style.display = "none";
+	document.querySelector("form").reset();
+	successMessage.style.display = "none";
+};
 
 
 //image modals
