@@ -29,7 +29,7 @@ function attr(element, attrName, attrValue) {
 
 //call ajax function to start create elements
 //header element (photographer profile)
-ajaxCall("GET", "./FishEyeDataFR.json", function(response) {
+ajaxCall("GET", "http://localhost/P6_OC/FishEyeDataFR.json", function(response) {
 	response = JSON.parse(response);
 	//give title to the page
 	var pageTitle = document.querySelector("title")
@@ -551,8 +551,10 @@ var sortBtn = document.getElementById("sort-show");
 sortBtn.addEventListener("click", function() {
   if (getStyle(hidden, "display") == "none") {
     hidden.style.display = "block";
+    attr(sortBtn, "aria-expanded", true);
   } else {
     hidden.style.display = "none";
+    attr(sortBtn, "aria-expanded", false);
   }
 })
 

@@ -9,7 +9,7 @@
 	<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
 	<script src="https://kit.fontawesome.com/6b2f05754f.js" crossorigin="anonymous"></script>
 	<link rel="icon" href="favicon.ico">
-	<title></title>
+	<title>Portfolio Page</title>
 </head>
 
 <body id="body">
@@ -17,7 +17,7 @@
 	<header class="header" role="banner">
 	
 		<div class="header--logo">
-			<a href="index.html" aria-label="FishEye Homepage" role="image link">
+			<a href="index.html" aria-label="FishEye Homepage" role="link">
 			<img src="fisheye_logo.PNG" alt="Fisheye Homepage" class="header--logo--img">
 			</a>
 		</div>
@@ -37,39 +37,38 @@
 
 		<nav class="sort">
 			<p>Trier par</p>
-			<ul class="sort-content">
-				<li id="sort-show" class="sort-content--item">
+			<div class="sort-content">
+				<div id="sort-show" class="sort-content--item" role="button" aria-haspopup="listbox" aria-expanded="false">
 					<span id="sort-by"></span>
-					<i class="fas fa-chevron-up"></i>
-				</li>
-				<div id="hidden">
-					<li id="sort-likes" class="sort-content--item">Popularité</li>
-					<li id="sort-date" class="sort-content--item">Date</li>
-					<li id="sort-name" class="sort-content--item">Titre</li>
+					<span class="fas fa-chevron-up"></span>
 				</div>
-			</ul>
+				<ul id="hidden">
+					<li id="sort-likes" class="sort-content--item" role="listbox">Popularité</li>
+					<li id="sort-date" class="sort-content--item" role="listbox">Date</li>
+					<li id="sort-name" class="sort-content--item" role="listbox">Titre</li>
+				</ul>
+			</div>
 		</nav>
-
 
 		<section id="photo-tiles">
 			
 		</section>
 
 		<section class="static-stats">
-			<p><span id="photographer-total-likes"></span> <i class="fas fa-heart"></i>
+			<p><span id="photographer-total-likes"></span> <span class="fas fa-heart"></span>
 				<span id="photographer-price"></span>€ / jour
 			</p>
 		</section>
 
 		<section class="modal-bg">
-			<i id="close-modal-media" class="close fas fa-times" title="Close dialog"></i>
-			<i id="prev-img" class="fas fa-chevron-left" title="Previous image"></i>
-			<i id="next-img" class="fas fa-chevron-right" title="Next image"></i>
+			<span id="close-modal-media" class="close fas fa-times" title="Close dialog"></span>
+			<span id="prev-img" class="fas fa-chevron-left" title="Previous image"></span>
+			<span id="next-img" class="fas fa-chevron-right" title="Next image"></span>
 		</section>
 
 		<section id="bg-form-modal">
 			<div class="modal-form-content">
-				<i class="close fas fa-times" title="Close dialog"></i>
+				<span class="close fas fa-times" title="Close dialog"></span>
 				<form name="contact" method="post">
 					<div class="form-content">
 						<h2>Contactez-moi
@@ -118,9 +117,10 @@
 	</main>
 
 
-
-</body>
 <script type="text/javascript" src="pages.js"></script>
+<noscript>Your browser does not support JavaScript</noscript>
+</body>
+
 
 
 </html>
