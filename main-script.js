@@ -99,7 +99,7 @@ ajaxGet("http://localhost/P6_OC/FishEyeDataFR.json", function(response) {
 		for (var k = 0; k<response.photographers[i].tags.length; k++) {
 			var photographerTagsItems = create("li");
 			photographerTagsItems.textContent = "#" + response.photographers[i].tags[k];
-			attr(photographerTagsItems, "value", photographerTagsItems.textContent);
+			attr(photographerTagsItems, "data-value", photographerTagsItems.textContent);
 			//tags style
 			attr(photographerTagsItems, "class", "container-tags--items photographer-tags");
 			attr(photographerTagsItems, "tabindex", 0);
@@ -145,7 +145,7 @@ function removeStyle(toReset) {
 //filter tag function
 function filterByTag(item) {
 	item.addEventListener("click", function() {
-		var tagValue = item.getAttribute("value");
+		var tagValue = item.getAttribute("data-value");
 		var photographerTags = Array.from(document.getElementsByClassName("container-tags--individual"));
 		var tagItems = document.getElementsByClassName("container-tags--items");
 
