@@ -281,7 +281,6 @@ var contactBtn = document.getElementById("contact-btn");
 //open form on click
 contactBtn.addEventListener("click", function () {
 	formModalBg.style.display = "block";
-	var formInput = Array.from(document.getElementsByClassName("text-control"));
 	firstName.focus();
 });
 //open form on enter
