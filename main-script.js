@@ -69,6 +69,11 @@ ajaxGet("./FishEyeDataFR.json", function(response) {
 		var tilesLink = create("div");
 		attr(tilesLink, "class", "tiles-items--link");
 		attr(tilesLink, "tabindex", "0");
+		tilesLink.addEventListener("keyup", function(e) {
+			if (e.keyCode == 13) {
+				e.target.firstChild.click();
+			}
+		})
 		tilesLink.appendChild(pageLink);
 		tilesLink.appendChild(photographerName);
 
