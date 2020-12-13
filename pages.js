@@ -29,7 +29,7 @@ function attr(element, attrName, attrValue) {
 
 //call ajax function to start create elements
 //header element (photographer profile)
-ajaxCall("GET", "http://localhost/P6_OC/FishEyeDataFR.json", function(response) {
+ajaxCall("GET", "./FishEyeDataFR.json", function(response) {
 	response = JSON.parse(response);
 	//give title to the page
 	var pageTitle = document.querySelector("title")
@@ -188,6 +188,7 @@ ajaxCall("GET", "http://localhost/P6_OC/FishEyeDataFR.json", function(response) 
 					//likes icon
 					var likesIcon = create("i");
 					attr(likesIcon, "class", "fas fa-heart tiles--details--likes--icon");
+					attr(likesIcon, "aria-label", "likes");
 					//on click the icon, +1 like
 					likesIcon.onclick = function() {
 						this.previousSibling.textContent++;
@@ -455,7 +456,9 @@ document.addEventListener("click", function(e) {
 			} else {
 				name.parentElement.classList.remove("current-modal");
 			}
-		})		
+		})
+		prevBtn.removeAttribute("style");
+		nextBtn.removeAttribute("style");		
 	}
 }, false)
 //open modal on clicking enter
@@ -588,7 +591,7 @@ sortByLikes.onclick = function() {
 			popularity: node.querySelector(".tiles--details--likes--number").textContent
 		};
 	}).sort(function(a,b) {
-		return a.popularity - b.popularity;
+		return b.popularity - a.popularity;
 	}).forEach(function(item) {
 		tiles.appendChild(item.node);
 	})
@@ -601,7 +604,7 @@ sortByLikes.onclick = function() {
 			popularity: node.getAttribute("likes")
 		};
 	}).sort(function(a,b) {
-		return a.popularity - b.popularity;
+		return b.popularity - a.popularity;
 	}).forEach(function(item) {
 		modalBg[0].appendChild(item.node);
 	})
@@ -611,6 +614,9 @@ sortByLikes.onclick = function() {
 	//show the selected filter
 	sortBy.textContent = "Popularité";
 	sortByLikes.style.display = "none";
+	//aria attributes
+	attr(sortBtn, "aria-activedescendant", "sort-likes");
+	ariaSelected("sort-likes");
 }
 
 //sort by date
@@ -629,6 +635,9 @@ sortByDate.onclick = function() {
 	//show the selected filter
 	sortBy.textContent = "Date";
 	sortByDate.style.display = "none";
+	//aria attributes
+	attr(sortBtn, "aria-activedescendant", "sort-date");
+	ariaSelected("sort-date");
 }
 
 //sort by name
@@ -647,6 +656,9 @@ sortByName.onclick = function() {
 	//show the selected filter
 	sortBy.textContent = "Titre";
 	sortByName.style.display = "none";
+	//aria attributes
+	attr(sortBtn, "aria-activedescendant", "sort-name");
+	ariaSelected("sort-name");
 }
 
 //sort by date function
@@ -675,35 +687,13 @@ function sortName(toSort, sortReq, parentElement) {
 		parentElement.appendChild(item.node);
 	});
 }
-
-
-
-
-/*
-//tags filter function
-document.addEventListener("click", function(e) {
-	if (e.target.matches(".photographer-tags")) {
-		var tagValue = e.target.getAttribute("value");
-		var photographerTags = Array.from(document.getElementsByClassName("tags--individual"));
-		var tagItems = document.getElementsByClassName("container-tags--items");
-
-		photographerTags.forEach(tag => {
-			if (tag.textContent == tagValue) {
-				tag.parentElement.style.display = "block";
-			} else {
-				tag.parentElement.style.display = "none";
-			}
-		})
-		removeStyle(tagItems);
-		e.target.style.backgroundColor = "#e18d7a";
-	}
-}, false)
-//on clicking enter
-document.addEventListener("keyup", function(e) {
-	if (e.target.matches(".photographer-tags")) {
-		if (e.keyCode === 13) {
-			e.target.click()
+//aria-selected function
+function ariaSelected(selectedProperty) {
+	for (var i = 0; i<sortOptions.length; i++) {
+		if (sortOptions[i].getAttribute("id") == selectedProperty) {
+			attr(sortOptions[i], "aria-selected", "true");
+		} else {
+			attr(sortOptions[i], "aria-selected", "false");
 		}
 	}
-}, false)
-*/
+}

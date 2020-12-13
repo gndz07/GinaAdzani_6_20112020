@@ -30,7 +30,7 @@ function attr(element, attrName, attrValue) {
 }
 
 
-ajaxGet("http://localhost/P6_OC/FishEyeDataFR.json", function(response) {
+ajaxGet("./FishEyeDataFR.json", function(response) {
 	response = JSON.parse(response);
 
 	for (var i = 0; i<response.photographers.length; i++) {
@@ -48,12 +48,11 @@ ajaxGet("http://localhost/P6_OC/FishEyeDataFR.json", function(response) {
 		}
 		//image alt text
 		var photoName = response.photographers[i].name;
-		var altText = "Photo par " + photoName;
-		attr(imgSamplePhoto, "alt", altText);
 		//image style
 		attr(imgSamplePhoto, "class", "tiles-items--photo");
 		//link to go to each photographer's page
 		var pageLink = create("a");
+		attr(pageLink, "aria-label", photoName);
 		//link to each page
 		attr(pageLink, "href", "photographer-page.html?name=" + photoName.replaceAll(" ", "_"));
 		//make sample photo as child of link element

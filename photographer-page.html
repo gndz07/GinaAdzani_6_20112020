@@ -36,18 +36,16 @@
 		</section>
 
 		<nav class="sort">
-			<p>Trier par</p>
-			<div class="sort-content">
-				<div id="sort-show" class="sort-content--item" role="button" aria-haspopup="listbox" aria-expanded="false">
+			<label for="sort-show" id="sort-label">Trier par</label>
+				<button id="sort-show" name="sort-show" class="sort-btn" role="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="sort-label">
 					<span id="sort-by"></span>
 					<span class="fas fa-chevron-up"></span>
-				</div>
-				<ul id="hidden" role="listbox">
-					<li id="sort-likes" class="sort-content--item" role="option">Popularité</li>
-					<li id="sort-date" class="sort-content--item" role="option">Date</li>
-					<li id="sort-name" class="sort-content--item" role="option">Titre</li>
+				</button>
+				<ul id="hidden" class="sort-content" role="listbox" aria-labelledby="sort-label">
+						<li id="sort-likes" class="sort-content--item" role="option" aria-selected="false">Popularité</li>
+						<li id="sort-date" class="sort-content--item" role="option" aria-selected="false">Date</li>
+						<li id="sort-name" class="sort-content--item" role="option" aria-selected="false">Titre</li>
 				</ul>
-			</div>
 		</nav>
 
 		<section id="photo-tiles">
@@ -60,15 +58,15 @@
 			</p>
 		</section>
 
-		<section class="modal-bg">
-			<span id="close-modal-media" class="close fas fa-times" title="Close dialog"></span>
-			<span id="prev-img" class="fas fa-chevron-left" title="Previous image"></span>
-			<span id="next-img" class="fas fa-chevron-right" title="Next image"></span>
+		<section class="modal-bg" aria-label="image close up view">
+			<span id="close-modal-media" class="close fas fa-times" aria-label="Close dialog"></span>
+			<span id="prev-img" class="fas fa-chevron-left" aria-label="Previous image"></span>
+			<span id="next-img" class="fas fa-chevron-right" aria-label="Next image"></span>
 		</section>
 
 		<section id="bg-form-modal">
 			<div class="modal-form-content">
-				<span class="close fas fa-times" title="Close dialog"></span>
+				<span class="close fas fa-times" aria-label="close contact form"></span>
 				<form name="contact" method="post">
 					<div class="form-content">
 						<h2>Contactez-moi
@@ -77,35 +75,35 @@
 						</h2>
 
 						<div class="form-data">
-							<label for="first">Prénom</label>
+							<label id="first-name" for="first">Prénom</label>
 							<br>
-                			<input class="text-control" type="text" id="first" name="first"/>
+                			<input class="text-control" type="text" id="first" name="first" aria-labelledby="first-name"/>
                			</div>
 
                			<div class="form-data">
-							<label for="last">Nom</label>
+							<label id="last-name" for="last">Nom</label>
 							<br>
-                			<input class="text-control" type="text" id="last" name="last"/>
+                			<input class="text-control" type="text" id="last" name="last" aria-labelledby="last-name"/>
                			</div>
 
                			<div class="form-data">
-							<label for="email">Email</label>
+							<label id="email-address" for="email">Email</label>
 							<br>
-                			<input class="text-control" type="email" id="email" name="email"/>
+                			<input class="text-control" type="email" id="email" name="email" aria-labelledby="email-address"/>
                			</div>
 
                			<div class="form-data">
-							<label for="message">Votre message</label>
+							<label id="message-input" for="message">Votre message</label>
 							<br>
-                			<textarea class="text-control" id="message" name="message" rows="4"></textarea>
+                			<textarea class="text-control" id="message" name="message" rows="4" aria-labelledby="message-input"></textarea>
                			</div>
 
-               			<input id="submit-btn" type="submit" class="btn" value="Envoyer"/>
+               			<input id="submit-btn" type="submit" class="btn" value="Envoyer" aria-label="send"/>
 
                			<div id="formResult">
-              				<i class="close fas fa-times"></i>
+              				<span class="close fas fa-times" aria-label="close contact form"></span>
               				<p id="formResultText"></p>
-              				<input id="close-btn--validation" class="btn" type="button" value="Fermer"/>
+              				<input id="close-btn--validation" class="btn" type="button" value="Fermer" aria-label="close contact from"/>
 						</div>
 					</div>
 				</form>

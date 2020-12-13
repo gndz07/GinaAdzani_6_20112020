@@ -7,7 +7,19 @@
 		display: flex;
 		margin-bottom: 2em;
 
-		p {
+		&-btn {
+			background-color: $primary-color;
+			margin: -0.5em 0 0 2em;
+			padding: 0.8em 0;
+			border-radius: 8px;
+			color: white;
+			width: 10em;
+			font-family: inherit;
+			font-size: 1em;
+			border: none;
+		}
+
+		label {
 			font-weight: bold;
 		}
 
@@ -16,29 +28,28 @@
 			list-style: none;
 			background-color: $primary-color;
 			color: white;
-			margin-left: 5em;
-			margin-top: -0.1em;
-			padding: 1em 1em 0;
+			margin-left: 5.95em;
+			margin-top: 1.6em;
+			padding: 1.5em 1em 0;
 			cursor: pointer;
 			border-radius: 8px;
+			width: 9em;
+
 
 			.sort-show {
 				padding-top: 5px;
 			}
 
 			&--item {
-				padding-bottom: 1em;
-				padding-right: 2em;
+				padding: 0 1.5em 1.2em;
 
-				&:nth-child(-n + 2) {
-				&:after {
+				&:before {
 					content: "";
   					display: block;
- 					width: 143%;
- 					margin: 1.5em 0 -1.3em -0.5em;
+ 					width: 130%;
   					border-bottom: 2px solid white;
+  					margin: -1em 0 1em -0.5em;
 				}
-			}
 
 			}
 		}
@@ -55,7 +66,13 @@
 	}
 
 	.fa-chevron-up {
-		margin: 0 -2em 0 3em;
+		position: relative;
+		right: -3.5em;
+	}
+
+	#sort-by {
+		position: absolute;
+		left: 11em;
 	}
 }
 
