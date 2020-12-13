@@ -260,7 +260,8 @@ ajaxCall("GET", "./FishEyeDataFR.json", function(response) {
 						}
 					})
 					removeStyle(filterTags);
-					tag.style.backgroundColor = "#e18d7a";
+					tag.style.backgroundColor = "#901C1C";
+					tag.style.color = "white";
 				}
 				//on enter button
 				tag.addEventListener("keyup", function(e) {

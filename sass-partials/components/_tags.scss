@@ -13,7 +13,8 @@
 		cursor: pointer;
 
 		&:hover {
-			background-color: lighten($secondary-color, 20%);
+			background-color: $primary-color;
+			color: white;
 		}
 	}
 	

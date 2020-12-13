@@ -38,7 +38,8 @@ body {
   cursor: pointer;
 }
 .container-tags--items:hover {
-  background-color: #e69f8f;
+  background-color: #901C1C;
+  color: white;
 }
 
 .btn {

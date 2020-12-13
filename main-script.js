@@ -165,7 +165,8 @@ function filterByTag(item) {
 			}
 		})
 		removeStyle(tagItems);
-		item.style.backgroundColor = "#e18d7a";
+		item.style.backgroundColor = "#901C1C";
+		item.style.color = "white";
 	})
 	//on click enter
 	item.addEventListener("keyup", function(e) {
