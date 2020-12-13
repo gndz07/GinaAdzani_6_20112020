@@ -262,6 +262,12 @@ ajaxCall("GET", "./FishEyeDataFR.json", function(response) {
 					removeStyle(filterTags);
 					tag.style.backgroundColor = "#e18d7a";
 				}
+				//on enter button
+				tag.addEventListener("keyup", function(e) {
+					if (e.keyCode == 13) {
+						tag.click();
+					}
+				})
 			})
 		}
 	}
@@ -275,6 +281,8 @@ var contactBtn = document.getElementById("contact-btn");
 //open form on click
 contactBtn.addEventListener("click", function () {
 	formModalBg.style.display = "block";
+	var formInput = Array.from(document.getElementsByClassName("text-control"));
+	firstName.focus();
 });
 //open form on enter
 contactBtn.addEventListener("keyup", function(e) {
@@ -618,7 +626,13 @@ sortByLikes.onclick = function() {
 	attr(sortBtn, "aria-activedescendant", "sort-likes");
 	ariaSelected("sort-likes");
 }
-
+//by clicking enter
+sortByLikes.addEventListener("keyup", function(e) {
+	if (e.keyCode == 13) {
+		sortByLikes.click();
+	}
+})
+	
 //sort by date
 sortByDate.onclick = function() {
 	//DOM of children to be sorted
@@ -639,6 +653,12 @@ sortByDate.onclick = function() {
 	attr(sortBtn, "aria-activedescendant", "sort-date");
 	ariaSelected("sort-date");
 }
+//by clicking enter
+sortByDate.addEventListener("keyup", function(e) {
+	if (e.keyCode == 13) {
+		sortByDate.click();
+	}
+})
 
 //sort by name
 sortByName.onclick = function() {
@@ -660,6 +680,12 @@ sortByName.onclick = function() {
 	attr(sortBtn, "aria-activedescendant", "sort-name");
 	ariaSelected("sort-name");
 }
+//by clicking enter
+sortByName.addEventListener("keyup", function(e) {
+	if (e.keyCode == 13) {
+		sortByName.click();
+	}
+})
 
 //sort by date function
 function sortDate(toSort, parentElement) {
