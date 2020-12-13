@@ -142,7 +142,7 @@ ajaxCall("GET", "./FishEyeDataFR.json", function(response) {
 						//for initial video
 						mediaItems = create("video");
 						mediaItems.src = 'sass-partials/images/' + response.media[j].video;
-						attr(mediaItems, "poster", mediaItems.src.replace("mp4", "jpg"));
+						attr(mediaItems, "poster", mediaItems.src.replace("mp4", "JPG"));
 						mediaItems.controls = true;
 						//for modal video
 						mediaModal = create("video");
