@@ -448,6 +448,10 @@ body {
   margin-top: 0;
   margin-right: 0.2em;
 }
+.tiles--details--likes--icon {
+  cursor: pointer;
+}
+
 @media all and (min-width: 1024px) {
   #photo-tiles {
     display: flex;
