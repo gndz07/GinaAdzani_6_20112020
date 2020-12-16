@@ -58,8 +58,7 @@ ajaxGet("./FishEyeDataFR.json", function(response) {
 		//image alt text
 		let photoName = response.photographers[i].name;
 		//link to go to each photographer's page
-		let pageLink = create("a");
-		attr(pageLink, "href", "photographer-page.html?name=" + photoName.replaceAll(" ", "_"));
+		let pageLink = create("a", {href: "photographer-page.html?name=" + photoName.replaceAll(" ", "_")});
 		attr(pageLink, "aria-label", photoName);
 		//make sample photo as child of link element
 		pageLink.appendChild(imgSamplePhoto);
