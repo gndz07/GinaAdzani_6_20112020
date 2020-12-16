@@ -1,5 +1,5 @@
 function ajaxGet(url, callback) {
-	var request = new XMLHttpRequest();
+	let request = new XMLHttpRequest();
 	request.open("GET", url);
 	request.addEventListener("load", function() {
 		if (request.status >= 200 && request.status < 400) {
@@ -16,30 +16,39 @@ function ajaxGet(url, callback) {
 	request.send(null); 
 }
 
-var mainTiles = document.getElementById("main-tiles");
+let mainTiles = document.getElementById("main-tiles");
 
-//element creation function
-function create(element) {
-	var name = document.createElement(element);
-	return name;
+//function to create element
+const create = (elm, attributes) => {
+	const element = document.createElement(elm);
+	for (key in attributes) {
+    	element.setAttribute(key, attributes[key])
+  	}
+	return element;
 }
 
-//attribute function
+//attribute function, for attributes whose names are not fulfiling the exigence for key object names, e.g attributes with dash
 function attr(element, attrName, attrValue) {
 	element.setAttribute(attrName, attrValue);
 }
 
+//function for multiple append child
+function appendAll(parentElm, allChildren) {
+	allChildren.forEach(item => {
+		parentElm.appendChild(item);
+	})
+}
 
 ajaxGet("./FishEyeDataFR.json", function(response) {
 	response = JSON.parse(response);
 
-	for (var i = 0; i<response.photographers.length; i++) {
+	for (let i = 0; i<response.photographers.length; i++) {
 		//create img element to store the picture
-		var imgSamplePhoto = create("img");
+		let imgSamplePhoto = create("img", {class: "tiles-items--photo"});
 		//fetch sample image for each photographer using id
-		var photographerId = response.photographers[i].id;
-		for (var j = 0; j<response.media.length; j++) {
-			var mediaPhotographerId = response.media[j].photographerId;
+		let photographerId = response.photographers[i].id;
+		for (let j = 0; j<response.media.length; j++) {
+			let mediaPhotographerId = response.media[j].photographerId;
 
 			if(photographerId == mediaPhotographerId && Object.prototype.hasOwnProperty.call(response.media[j], "image")) {
 				imgSamplePhoto.src = 'sass-partials/images/' + response.media[j].image;
@@ -47,70 +56,49 @@ ajaxGet("./FishEyeDataFR.json", function(response) {
 			}
 		}
 		//image alt text
-		var photoName = response.photographers[i].name;
-		//image style
-		attr(imgSamplePhoto, "class", "tiles-items--photo");
+		let photoName = response.photographers[i].name;
 		//link to go to each photographer's page
-		var pageLink = create("a");
-		attr(pageLink, "aria-label", photoName);
-		//link to each page
+		let pageLink = create("a");
 		attr(pageLink, "href", "photographer-page.html?name=" + photoName.replaceAll(" ", "_"));
+		attr(pageLink, "aria-label", photoName);
 		//make sample photo as child of link element
 		pageLink.appendChild(imgSamplePhoto);
-		
 
 		//fetch photographer name
-		var photographerName = create("h2");
+		let photographerName = create("h2", {class: "tiles-items--name"});
 		photographerName.textContent = photoName;
-		//name style
-		attr(photographerName, "class", "tiles-items--name");
 
 		//make division for link to photographer pages
-		var tilesLink = create("div");
-		attr(tilesLink, "class", "tiles-items--link");
-		attr(tilesLink, "tabindex", "0");
+		let tilesLink = create("div", {class: "tiles-items--link", tabindex: 0});
 		tilesLink.addEventListener("keyup", function(e) {
 			if (e.keyCode == 13) {
 				e.target.firstChild.click();
 			}
 		})
-		tilesLink.appendChild(pageLink);
-		tilesLink.appendChild(photographerName);
-
+		appendAll(tilesLink, [pageLink, photographerName]);
 
 		//fetch photographer location
-		var photographerLocation = create("h3");
+		let photographerLocation = create("h3", {class: "tiles-items--location"});
 		photographerLocation.textContent = response.photographers[i].city + ", " + response.photographers[i].country;
-		//location style
-		attr(photographerLocation, "class", "tiles-items--location");
 
 		//fetch tagline
-		var photographerTagline = create("p");
+		let photographerTagline = create("p", {class: "tiles-items--tagline"});
 		photographerTagline.textContent = response.photographers[i].tagline;
-		//tagline style
-		attr(photographerTagline, "class", "tiles-items--tagline");
 
 		//fetch price
-		var photographerPrice = create("p");
+		let photographerPrice = create("p", {class: "tiles-items--price"});
 		photographerPrice.textContent = response.photographers[i].price + "€/jour";
-		//price style
-		attr(photographerPrice, "class", "tiles-items--price");
 
 		//fetch tags
-		var photographerTags = create("ul");
-		attr(photographerTags, "class", "container-tags container-tags--individual");
+		let photographerTags = create("ul", {class: "container-tags container-tags--individual"});
 		//loop through each tags
-		for (var k = 0; k<response.photographers[i].tags.length; k++) {
-			var photographerTagsItems = create("li");
+		for (let k = 0; k<response.photographers[i].tags.length; k++) {
+			let photographerTagsItems = create("li", {class: "container-tags--items photographer-tags", tabindex: 0});
 			photographerTagsItems.textContent = "#" + response.photographers[i].tags[k];
 			attr(photographerTagsItems, "data-value", photographerTagsItems.textContent);
-			//tags style
-			attr(photographerTagsItems, "class", "container-tags--items photographer-tags");
-			attr(photographerTagsItems, "tabindex", 0);
 			//tags for screen reader
-			var srOnlyTags = create("span");
+			let srOnlyTags = create("span", {class: "sr-only"});
 			srOnlyTags.textContent = response.photographers[i].tags[k];
-			attr(srOnlyTags, "class", "sr-only");
 			//put into DOM
 			photographerTags.appendChild(photographerTagsItems);
 			photographerTags.appendChild(srOnlyTags);
@@ -118,29 +106,23 @@ ajaxGet("./FishEyeDataFR.json", function(response) {
 
 		//filter functionality for each tag button
 		//get the DOM of the tag element
-		var photographerTag = Array.from(document.getElementsByClassName("photographer-tags"));
+		let photographerTag = Array.from(document.getElementsByClassName("photographer-tags"));
 		//filter function on each tags
 		photographerTag.forEach(item => filterByTag(item));
-		
-		var tilesItems = document.createElement("article");
-		tilesItems.setAttribute("class", "tiles-items");
+		//join every elements in one group
+		let tilesItems = create("article", {class: "tiles-items"});
 		//elements inside each tiles
-		tilesItems.appendChild(tilesLink);
-		tilesItems.appendChild(photographerLocation);
-		tilesItems.appendChild(photographerTagline);
-		tilesItems.appendChild(photographerPrice);
-		tilesItems.appendChild(photographerTags);
-
+		appendAll(tilesItems, [tilesLink, photographerLocation, photographerTagline, photographerPrice, photographerTags]);
+		//put into main section on DOM
 		mainTiles.appendChild(tilesItems);
 	}
 });
 
-
 //get tags elements on navigation bar
-var navigationTags = Array.from(document.getElementsByClassName("navigation-tags"));
+let navigationTags = Array.from(document.getElementsByClassName("navigation-tags"));
 //function to remove inline style attribute
 function removeStyle(toReset) {
-	for (var i = 0; i<toReset.length; i++) {
+	for (let i = 0; i<toReset.length; i++) {
 		if (toReset[i].hasAttribute("style")) {
 			toReset[i].removeAttribute("style");
 		}
@@ -149,13 +131,13 @@ function removeStyle(toReset) {
 //filter tag function
 function filterByTag(item) {
 	item.addEventListener("click", function() {
-		var tagValue = item.getAttribute("data-value");
-		var photographerTags = Array.from(document.getElementsByClassName("container-tags--individual"));
-		var tagItems = document.getElementsByClassName("container-tags--items");
+		let tagValue = item.getAttribute("data-value");
+		let photographerTags = Array.from(document.getElementsByClassName("container-tags--individual"));
+		let tagItems = document.getElementsByClassName("container-tags--items");
 
 		photographerTags.forEach(tag => {
-			var tagChildren = tag.children;
-			for (var b = 0; b<tagChildren.length; b++) {
+			let tagChildren = tag.children;
+			for (let b = 0; b<tagChildren.length; b++) {
 				if (tagChildren[b].textContent.includes(tagValue)) {
 				tag.parentElement.style.display = "block";
 				break;
@@ -178,9 +160,8 @@ function filterByTag(item) {
 //filter function (on navigation bar)
 navigationTags.forEach(item => filterByTag(item));
 
-
 //DOM of the top menu to bring back the main content
-var navigationLabel = document.getElementsByClassName("header--navigation--additional-label");
+let navigationLabel = document.getElementsByClassName("header--navigation--additional-label");
 //click event to show all contents
 navigationLabel[0].addEventListener("click", function() {
 	Array.from(document.getElementsByClassName("tiles-items")).forEach(items => {

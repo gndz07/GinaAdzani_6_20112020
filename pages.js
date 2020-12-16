@@ -1,5 +1,5 @@
 function ajaxCall(reqType, url, callback) {
-	var request = new XMLHttpRequest();
+	let request = new XMLHttpRequest();
 	request.open(reqType, url);
 	request.addEventListener("load", function() {
 		if (request.status >= 200 && request.status < 400) {
@@ -14,228 +14,185 @@ function ajaxCall(reqType, url, callback) {
 	});
 	request.send(null); 
 }
-//element creation function
-function create(element) {
-	var name = document.createElement(element);
-	return name;
+//function to create element
+const create = (elm, attributes) => {
+	const element = document.createElement(elm);
+	for (key in attributes) {
+    	element.setAttribute(key, attributes[key])
+  	}
+	return element;
 }
-//attribute function
+//attribute function, for attributes whose names are not fulfiling the exigence for key object names, e.g attributes with dash
 function attr(element, attrName, attrValue) {
 	element.setAttribute(attrName, attrValue);
 }
+//function for multiple append child
+function appendAll(parentElm, allChildren) {
+	allChildren.forEach(item => {
+		parentElm.appendChild(item);
+	})
+}
 //function to get the name from the URL parameter
-	var urlParam = window.location.search.substring(1).split("=");
-	var nameFromUrl = urlParam[1].replaceAll("_", " ");
+	let urlParam = window.location.search.substring(1).split("=");
+	let nameFromUrl = urlParam[1].replaceAll("_", " ");
 
 //call ajax function to start create elements
 //header element (photographer profile)
 ajaxCall("GET", "./FishEyeDataFR.json", function(response) {
 	response = JSON.parse(response);
 	//give title to the page
-	var pageTitle = document.querySelector("title")
+	let pageTitle = document.querySelector("title")
 	pageTitle.textContent = nameFromUrl;
 
-	for (var i = 0; i<response.photographers.length; i++) {
+	for (let i = 0; i<response.photographers.length; i++) {
 		if (pageTitle.textContent === response.photographers[i].name) {
 			//get DOM of the photographer profile section
-			var idBlock = document.getElementById("id-block");
-			var dataBlock = create("div");
-			attr(dataBlock, "class", "data-block");
+			let idBlock = document.getElementById("id-block");
+			let dataBlock = create("div", {class: "data-block"});
 
 			//create the name element
-			var photographerName = create("h1");
+			let photographerName = create("h1", {class: "tiles-items--name"});
 			photographerName.textContent = nameFromUrl;
-			//give class to element
-			attr(photographerName, "class", "tiles-items--name");
-			//put into the parent element
-			
+
 			//fetch photographer location
-			var photographerLocation = create("h2");
+			let photographerLocation = create("h2", {class: "tiles-items--location"});
 			photographerLocation.textContent = response.photographers[i].city + ", " + response.photographers[i].country;
-			//location style
-			attr(photographerLocation, "class", "tiles-items--location");
 
 			//fetch tagline
-			var photographerTagline = create("p");
+			let photographerTagline = create("p", {class: "tiles-items--tagline"});
 			photographerTagline.textContent = response.photographers[i].tagline;
-			//tagline style
-			attr(photographerTagline, "class", "tiles-items--tagline");
 
 			//fetch tags
-			var photographerTags = create("ul");
-			attr(photographerTags, "class", "container-tags");
+			let photographerTags = create("ul", {class: "container-tags"});
 			//loop through each tags
-			for (var k = 0; k<response.photographers[i].tags.length; k++) {
-				var photographerTagsItems = create("li");
+			for (let k = 0; k<response.photographers[i].tags.length; k++) {
+				let photographerTagsItems = create("li", {class: "container-tags--items photographer-tags", tabindex: 0, value: response.photographers[i].tags[k]});
 				photographerTagsItems.textContent = "#" + response.photographers[i].tags[k];
-				attr(photographerTagsItems, "value", response.photographers[i].tags[k]);
-				//tags style
-				attr(photographerTagsItems, "class", "container-tags--items photographer-tags");
-				attr(photographerTagsItems, "tabindex", "0");
 				//tags for screen reader
-				var srOnlyTags = create("span");
+				let srOnlyTags = create("span", {class: "sr-only"});
 				srOnlyTags.textContent = response.photographers[i].tags[k];
-				attr(srOnlyTags, "class", "sr-only");
 				//tags position
 				photographerTags.appendChild(photographerTagsItems);
 				photographerTags.appendChild(srOnlyTags);
 			}
 			//create img element to store the picture
-			var imgSamplePhoto = create("img");
+			let imgSamplePhoto = create("img", {class: "tiles-items--photo", alt: response.photographers[i].name});
 			//fetch sample image for each photographer using id
-			var photographerId = response.photographers[i].id;
-			for (var j = 0; j<response.media.length; j++) {
-				var samplePhotoId = response.media[j].photographerId;
-
+			let photographerId = response.photographers[i].id;
+			for (let j = 0; j<response.media.length; j++) {
+				let samplePhotoId = response.media[j].photographerId;
 				if(photographerId == samplePhotoId && Object.prototype.hasOwnProperty.call(response.media[j], "image")) {
 					imgSamplePhoto.src = 'sass-partials/images/' + response.media[j].image;
 					break;
 				}
 			}
-			//image alt text
-			attr(imgSamplePhoto, "alt", response.photographers[i].name);
-			//image style
-			attr(imgSamplePhoto, "class", "tiles-items--photo");
 			//div for picture
-			var imgBlock = create("div");
-			attr(imgBlock, "class", "img-block");
+			let imgBlock = create("div", {class: "img-block"});
+
 			//photographer price
 			//DOM for price
-			var photographerPrice = document.getElementById("photographer-price");
+			let photographerPrice = document.getElementById("photographer-price");
 			photographerPrice.textContent = response.photographers[i].price;
 
 			//put all elements on to the document
-			dataBlock.appendChild(photographerName);
-			dataBlock.appendChild(photographerLocation);
-			dataBlock.appendChild(photographerTagline);
-			dataBlock.appendChild(photographerTags);
+			appendAll(dataBlock, [photographerName, photographerLocation, photographerTagline, photographerTags])
 			imgBlock.appendChild(imgSamplePhoto);
-
-			idBlock.appendChild(dataBlock);
-			idBlock.appendChild(imgBlock);
+			appendAll(idBlock, [dataBlock, imgBlock]);
 			//array to store the likes number
-			var eachLikesNum = [];
+			let eachLikesNum = [];
 
 			//media content
-			var tiles = document.getElementById("photo-tiles");
+			let tiles = document.getElementById("photo-tiles");
 			//loop through the media contents
 			for (j = 0; j<response.media.length; j++) {
-				var mediaPhotographerId = response.media[j].photographerId;
+				let mediaPhotographerId = response.media[j].photographerId;
 				//check if the media belonged to the same photographer
 				if (photographerId === mediaPhotographerId) {
 					//see if the media item is an image
 					if (Object.prototype.hasOwnProperty.call(response.media[j], "image")) {
 						//for initial image
-						var mediaItems = create("img");
+						//use var because this variable will be used outside of this function block
+						var mediaItems = create("img", {class: "tiles--img", alt: response.media[j].alt, tabindex: 0});
 						mediaItems.src = 'sass-partials/images/' + response.media[j].image;
 						//for modal image
-						var mediaModal = create("img");
+						var mediaModal = create("img", {class: "modal-media", alt: response.media[j].alt});
 						mediaModal.src = mediaItems.src;
 						//media name
-						var mediaName = create("p");
+						var mediaName = create("p", {class: "tiles--name"});
 						mediaName.textContent = response.media[j].image.replaceAll("_", " ").slice(0, -4);
 						//modal name
-						var mediaModalName = create("p");
+						var mediaModalName = create("p", {class: "modal-media-name"});
 						mediaModalName.textContent = mediaName.textContent;
 					//if the media item is a video
 					} else if (Object.prototype.hasOwnProperty.call(response.media[j], "video")) {
 						//for initial video
-						mediaItems = create("video");
+						mediaItems = create("video", {class: "tiles--img", alt: response.media[j].alt, tabindex: 0, poster: mediaItems.src.replace("mp4", "JPG")});
 						mediaItems.src = 'sass-partials/images/' + response.media[j].video;
-						attr(mediaItems, "poster", mediaItems.src.replace("mp4", "JPG"));
 						mediaItems.controls = true;
 						//for modal video
-						mediaModal = create("video");
+						mediaModal = create("video", {class: "modal-media", alt: response.media[j].alt});
 						mediaModal.src = mediaItems.src;
 						mediaModal.controls = true;
 						//media name
-						mediaName = create("p");
+						mediaName = create("p", {class: "tiles--name"});
 						mediaName.textContent = response.media[j].video.replaceAll("_", " ").slice(0, -4);
-
 						//modal name
-						mediaModalName = create("p");
+						mediaModalName = create("p", {class: "modal-media-name"});
 						mediaModalName.textContent = mediaName.textContent;
 					}
-					//media on initial size
-					attr(mediaItems, "class", "tiles--img");
-					attr(mediaItems, "alt", response.media[j].alt);
-					attr(mediaItems, "tabindex", "0");
-					attr(mediaName, "class", "tiles--name");
+					//parent for modal (lightbox)
+					let modalBg = document.getElementsByClassName("modal-bg");
 
-					//on modal
-					attr(mediaModal, "class", "modal-media");
-					attr(mediaModal, "alt", response.media[j].alt);
-					attr(mediaModalName, "class", "modal-media-name");
-
-					var modalBg = document.getElementsByClassName("modal-bg");
-
-					//get the tag of each picture
-					var mediaTag = create("p");
+					//create the tag of each picture
+					let mediaTag = create("p", {class: "tags--individual sr-only"});
 					mediaTag.textContent = response.media[j].tags;
-					attr(mediaTag, "class", "tags--individual sr-only");
 					//tag for modal media
-					var mediaModalTag = create("p");
+					let mediaModalTag = create("p", {class: "modal-media-tag sr-only"});
 					mediaModalTag.textContent = response.media[j].tags;
-					attr(mediaModalTag, "class", "modal-media-tag sr-only");
 					//media prices
-					var price = create("p");
+					let price = create("p", {class: "tiles--details--price"});
 					price.textContent = response.media[j].price + "€";
-					attr(price, "class", "tiles--details--price");
 					//likes
-					var likes = create("p");
+					let likes = create("p", {class: "tiles--details--likes--number"});
 					likes.textContent = response.media[j].likes;
-					attr(likes, "class", "tiles--details--likes--number");
 					//likes icon
-					var likesIcon = create("i");
-					attr(likesIcon, "class", "fas fa-heart tiles--details--likes--icon");
+					let likesIcon = create("i", {class: "fas fa-heart tiles--details--likes--icon"});
 					attr(likesIcon, "aria-label", "likes");
 					//on click the icon, +1 like
 					likesIcon.onclick = function() {
 						this.previousSibling.textContent++;
-						var totalLikes = document.getElementById("photographer-total-likes");
+						let totalLikes = document.getElementById("photographer-total-likes");
 						totalLikes.textContent++;
 					}
-					//push to global var of likes
+					//push to global let of likes
 					eachLikesNum.push(parseInt(likes.textContent, 10));
 
 					//media details block
-					var mediaDetails = create("div");
-					attr(mediaDetails, "class", "tiles--details");
+					let mediaDetails = create("div", {class: "tiles--details"});
 					//grouping the media details
-					mediaDetails.appendChild(price);
-					mediaDetails.appendChild(likes);
-					mediaDetails.appendChild(likesIcon);
-					
+					appendAll(mediaDetails, [price, likes, likesIcon]);
+
 					//DOM
-					var imageTiles = create("article");
-					attr(imageTiles, "class", "tiles");
+					let imageTiles = create("article", {class: "tiles"});
 					attr(imageTiles, "date-taken", response.media[j].date);
-					imageTiles.appendChild(mediaItems);
-					imageTiles.appendChild(mediaName);
-					imageTiles.appendChild(mediaDetails);
-					imageTiles.appendChild(mediaTag);
+					appendAll(imageTiles, [mediaItems, mediaName, mediaDetails, mediaTag]);
 					tiles.appendChild(imageTiles);
 					//modal content
-					var modalContent = create("div");
-					attr(modalContent, "class", "modal-content");
+					let modalContent = create("div", {class: "modal-content", likes: response.media[j].likes});
 					attr(modalContent, "date-taken", response.media[j].date);
-					attr(modalContent, "likes", response.media[j].likes);
-					modalContent.appendChild(mediaModal);
-					modalContent.appendChild(mediaModalName);
-					modalContent.appendChild(mediaModalTag);
+					appendAll(modalContent, [mediaModal, mediaModalName, mediaModalTag]);
 					modalBg[0].appendChild(modalContent);
 				}
 			} //take the total likes DOM
-			var totalLikes = document.getElementById("photographer-total-likes");
-			var addAll = (acc, curValue) => acc + curValue;
+			let totalLikes = document.getElementById("photographer-total-likes");
+			let addAll = (acc, curValue) => acc + curValue;
 			totalLikes.textContent = eachLikesNum.reduce(addAll);
 
-
 			//filter DOM
-			var filterTags = Array.from(document.getElementsByClassName("photographer-tags"));
-			var modalContents = Array.from(document.getElementsByClassName("modal-content"));
-			var modalParent = Array.from(document.getElementsByClassName("modal-bg"));
-			var modalMediaTag = Array.from(document.getElementsByClassName("modal-media-tag"));
+			let filterTags = Array.from(document.getElementsByClassName("photographer-tags"));
+			let modalContents = Array.from(document.getElementsByClassName("modal-content"));
+			let modalParent = Array.from(document.getElementsByClassName("modal-bg"));
+			let modalMediaTag = Array.from(document.getElementsByClassName("modal-media-tag"));
 			//filter functionality
 			filterTags.forEach(tag => {
 				tag.onclick = function() {
@@ -244,8 +201,8 @@ ajaxCall("GET", "./FishEyeDataFR.json", function(response) {
 						modalParent[0].appendChild(content);
 					})
 					//filtering main tile's content
-					var tagValue = tag.getAttribute("value");
-					var photographerTags = Array.from(document.getElementsByClassName("tags--individual"));
+					let tagValue = tag.getAttribute("value");
+					let photographerTags = Array.from(document.getElementsByClassName("tags--individual"));
 					photographerTags.forEach(tag => {
 						if (tag.textContent == tagValue) {
 							tag.parentElement.style.display = "block";
@@ -274,11 +231,10 @@ ajaxCall("GET", "./FishEyeDataFR.json", function(response) {
 	}
 });
 
-
 //DOM of contact form
-var formModalBg = document.getElementById("bg-form-modal");
+let formModalBg = document.getElementById("bg-form-modal");
 //contact button DOM
-var contactBtn = document.getElementById("contact-btn");
+let contactBtn = document.getElementById("contact-btn");
 //open form on click
 contactBtn.addEventListener("click", function () {
 	formModalBg.style.display = "block";
@@ -291,7 +247,7 @@ contactBtn.addEventListener("keyup", function(e) {
 	}
 })
 //take close button
-var close = Array.from(document.getElementsByClassName("close"));
+let close = Array.from(document.getElementsByClassName("close"));
 //function to exit modals
 function exit(i, element) {
 	close[i].addEventListener("click", function() {
@@ -299,26 +255,23 @@ function exit(i, element) {
 	})
 }
 //DOM of lightbox
-var modalBg = document.getElementsByClassName("modal-bg");
+let modalBg = document.getElementsByClassName("modal-bg");
 exit(1, formModalBg);
 exit(2, formModalBg);
 
-
-
-
 //name on the contact form
-var contactFormName = document.getElementById("photographer-name");
+let contactFormName = document.getElementById("photographer-name");
 contactFormName.textContent = nameFromUrl;
 
 //contact form submission
 //DOM for form input fields
-var firstName = document.getElementById("first");
-var lastName = document.getElementById("last");
-var email = document.getElementById("email");
-var message = document.getElementById("message");
+let firstName = document.getElementById("first");
+let lastName = document.getElementById("last");
+let email = document.getElementById("email");
+let message = document.getElementById("message");
 
 //form data DOM
-var formData = Array.from(document.querySelectorAll(".form-data"));
+let formData = Array.from(document.querySelectorAll(".form-data"));
 
 //function to show error message
 function showError(index, message) {
@@ -333,11 +286,11 @@ function hideError(index) {
 }
 
 //valid condition
-var valid = true;
+let valid = true;
 
 //first name validation function
 //regex for name formats, not allowing space at the start and end
-var nameRegex = /^[^\s]+(\s+[^\s]+)*$/;
+let nameRegex = /^[^\s]+(\s+[^\s]+)*$/;
 function validateFirstName() {
 	if (!nameRegex.test(firstName.value) || firstName.value.length < 2) {
 		valid = false;
@@ -370,7 +323,7 @@ lastName.addEventListener('blur', validateLastName);
 
 //email validation function
 function validateEmail() {
-	var regexEmail = /.+@.+\..+/;
+	let regexEmail = /.+@.+\..+/;
 	if (!regexEmail.test(email.value)) {
 		valid = false;
 		message = "Veuillez entrer une adresse email valide.";
@@ -401,14 +354,14 @@ message.addEventListener('blur', validateMessage);
 
 //onsubmit form verification
 //submit button DOM
-var submitButton = document.getElementById("submit-btn");
+let submitButton = document.getElementById("submit-btn");
 //validation on clicking the submit button
 submitButton.addEventListener("click", validate);
 
 //function on clicking the submit button, AJAX request
 function validate (e) {
 	e.preventDefault();
-	var request = new XMLHttpRequest();
+	let request = new XMLHttpRequest();
 	request.onload = validateForm();
 }
 
@@ -426,9 +379,9 @@ valid = true;
 
 	//valid form, show success message
 	if (valid) {
-		var successMessage = document.getElementById("formResult");
-		var successMessageText = document.getElementById("formResultText");
-		var message = "Merci pour votre message !";
+		let successMessage = document.getElementById("formResult");
+		let successMessageText = document.getElementById("formResultText");
+		let message = "Merci pour votre message !";
 		successMessageText.textContent = message;
 		successMessage.style.display = "block";
 		console.log("First name: " + firstName.value);
@@ -436,28 +389,27 @@ valid = true;
 		console.log("Email: " + email.value);
 	}
 	return valid;
- }
+}
 
- //Close button on modal
- //close button DOM
- var modalCloseBtn = document.getElementById("close-btn--validation");
- //redirecting to index.html on click
- modalCloseBtn.onclick = function() {
-	var successMessage = document.getElementById("formResult");
+//Close button on modal
+//close button DOM
+let modalCloseBtn = document.getElementById("close-btn--validation");
+//redirecting to index.html on click
+modalCloseBtn.onclick = function() {
+	let successMessage = document.getElementById("formResult");
 	formModalBg.style.display = "none";
 	document.querySelector("form").reset();
 	successMessage.style.display = "none";
 };
-
 
 //image modals
 //open modal images
 document.addEventListener("click", function(e) {
 	if (e.target.matches(".tiles--img")) {
 		document.getElementsByClassName("modal-bg")[0].classList.add("show");
-		var picName = e.target.nextSibling.textContent;
+		let picName = e.target.nextSibling.textContent;
 		
-		var modalMediaName = Array.from(document.getElementsByClassName("modal-media-name"));
+		let modalMediaName = Array.from(document.getElementsByClassName("modal-media-name"));
 		modalMediaName.forEach(name => {
 			if (picName == name.textContent) {
 				name.parentElement.classList.add("current-modal");
@@ -490,14 +442,14 @@ document.addEventListener("keyup", function(e) {
 })
 
 //next button DOM
-var nextBtn = document.getElementById("next-img");
+let nextBtn = document.getElementById("next-img");
 //prev button DOM
-var prevBtn = document.getElementById("prev-img");
+let prevBtn = document.getElementById("prev-img");
 
 //next image
 nextBtn.addEventListener("click", function() {
-	var modalContent = document.getElementsByClassName("modal-content");
-	for (var i = 0; i<modalContent.length-1; i++) {
+	let modalContent = document.getElementsByClassName("modal-content");
+	for (let i = 0; i<modalContent.length-1; i++) {
 		if (modalContent[i].classList.contains("current-modal")) {
 			if (i<modalContent.length-2) {
 				modalContent[i].classList.remove("current-modal");
@@ -520,8 +472,8 @@ document.addEventListener("keyup", function(e) {
 
 //prev image
 prevBtn.addEventListener("click", function() {
-	var modalContent = document.getElementsByClassName("modal-content");
-	for (var i = modalContent.length - 1; i>0; i--) {
+	let modalContent = document.getElementsByClassName("modal-content");
+	for (let i = modalContent.length - 1; i>0; i--) {
 		if (modalContent[i].classList.contains("current-modal")) {
 			if (i>1) {
 				modalContent[i].classList.remove("current-modal");
@@ -545,7 +497,7 @@ document.addEventListener("keyup", function(e) {
 //get style of element
 function getStyle(el, name) {
 	if (document.defaultView && document.defaultView.getComputedStyle) {
-		var style = document.defaultView.getComputedStyle(el, null);
+		let style = document.defaultView.getComputedStyle(el, null);
 		if (style)
 			return style[name];
 	}
@@ -555,10 +507,10 @@ function getStyle(el, name) {
 }
 //sorting the elements
 //DOM of all media tiles
-var tiles = document.getElementById("photo-tiles");
-var hidden = document.getElementById("hidden");
+let tiles = document.getElementById("photo-tiles");
+let hidden = document.getElementById("hidden");
 //sort button
-var sortBtn = document.getElementById("sort-show");
+let sortBtn = document.getElementById("sort-show");
 //open the full sorting list
 sortBtn.addEventListener("click", function() {
   if (getStyle(hidden, "display") == "none") {
@@ -572,26 +524,25 @@ sortBtn.addEventListener("click", function() {
 
 //sorting function
 //DOM of the selected sort function
-var sortBy = document.getElementById("sort-by");
+let sortBy = document.getElementById("sort-by");
 //DOM of sort buttons
-var sortByLikes = document.getElementById("sort-likes");
-var sortByDate = document.getElementById("sort-date");
-var sortByName = document.getElementById("sort-name");
+let sortByLikes = document.getElementById("sort-likes");
+let sortByDate = document.getElementById("sort-date");
+let sortByName = document.getElementById("sort-name");
 //class DOM of the sort button
-var sortOptions = document.getElementsByClassName("sort-content--item");
+let sortOptions = document.getElementsByClassName("sort-content--item");
 //function to remove inline style attribute
 function removeStyle(toReset) {
-	for (var i = 0; i<toReset.length; i++) {
+	for (let i = 0; i<toReset.length; i++) {
 		if (toReset[i].hasAttribute("style")) {
 			toReset[i].removeAttribute("style");
 		}
 	}
 }
-
 //sort by popularity
 sortByLikes.onclick = function() {
 	//DOM of children to be sorted
-	var toSort = tiles.querySelectorAll(".tiles");
+	let toSort = tiles.querySelectorAll(".tiles");
 	//sort main tile by popularity and return the sorted content back to DOM
 	Array.prototype.map.call(toSort, function (node) {
 		return {
@@ -604,7 +555,7 @@ sortByLikes.onclick = function() {
 		tiles.appendChild(item.node);
 	})
 	//modal elements
-	var modalContent = modalBg[0].querySelectorAll(".modal-content");
+	let modalContent = modalBg[0].querySelectorAll(".modal-content");
 	//sort modal elements by popularity
 	Array.prototype.map.call(modalContent, function (node) {
 		return {
@@ -631,16 +582,15 @@ sortByLikes.addEventListener("keyup", function(e) {
 	if (e.keyCode == 13) {
 		sortByLikes.click();
 	}
-})
-	
+})	
 //sort by date
 sortByDate.onclick = function() {
 	//DOM of children to be sorted
-	var toSort = tiles.querySelectorAll(".tiles");
+	let toSort = tiles.querySelectorAll(".tiles");
 	//sort main tile by date
 	sortDate(toSort, tiles);
 	//modal elements
-	var modalContent = modalBg[0].querySelectorAll(".modal-content");
+	let modalContent = modalBg[0].querySelectorAll(".modal-content");
 	//sort modal elements
 	sortDate(modalContent, modalBg[0]);
 	//sorting menu display control
@@ -659,15 +609,14 @@ sortByDate.addEventListener("keyup", function(e) {
 		sortByDate.click();
 	}
 })
-
 //sort by name
 sortByName.onclick = function() {
 	//DOM of children to be sorted
-	var toSort = tiles.querySelectorAll(".tiles");
+	let toSort = tiles.querySelectorAll(".tiles");
 	//sort main tile by name
 	sortName(toSort, ".tiles--name", tiles);
 	//modal elements
-	var modalContent = modalBg[0].querySelectorAll(".modal-content");
+	let modalContent = modalBg[0].querySelectorAll(".modal-content");
 	//sort modal elements by name
 	sortName(modalContent, ".modal-media-name", modalBg[0]);
 	//sorting menu display control
@@ -686,7 +635,6 @@ sortByName.addEventListener("keyup", function(e) {
 		sortByName.click();
 	}
 })
-
 //sort by date function
 function sortDate(toSort, parentElement) {
 	Array.prototype.map.call(toSort, function (node) {
@@ -715,7 +663,7 @@ function sortName(toSort, sortReq, parentElement) {
 }
 //aria-selected function
 function ariaSelected(selectedProperty) {
-	for (var i = 0; i<sortOptions.length; i++) {
+	for (let i = 0; i<sortOptions.length; i++) {
 		if (sortOptions[i].getAttribute("id") == selectedProperty) {
 			attr(sortOptions[i], "aria-selected", "true");
 		} else {
