@@ -126,7 +126,7 @@ ajaxCall("GET", "./FishEyeDataFR.json", function(response) {
 					//if the media item is a video
 					} else if (Object.prototype.hasOwnProperty.call(response.media[j], "video")) {
 						//for initial video
-						mediaItems = create("video", {class: "tiles--img", alt: response.media[j].alt, tabindex: 0, poster: mediaItems.src.replace("mp4", "JPG")});
+						mediaItems = create("video", {class: "tiles--img", alt: response.media[j].alt, tabindex: 0, poster: 'sass-partials/images/' + response.media[j].video.replace("mp4", "JPG")});
 						mediaItems.src = 'sass-partials/images/' + response.media[j].video;
 						mediaItems.controls = true;
 						//for modal video
